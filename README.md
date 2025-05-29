@@ -16,4 +16,12 @@ The Smart-Shower aims to provide a more efficient, personalized, and intelligent
 
 -> Cold Temperature Alert: Sends a warning if pipe temperatures drop too low, helping to prevent frozen or burst pipes—especially relevant for homes in colder northern climates (like mine).
 
+# Planned Future Enhancements
+
+-> Rich Media User Interface: Build an advanced touchscreen UI that supports media platforms such as Spotify and YouTube for a more immersive shower experience.
+
+-> Metal Contamination Detection: Integrate a sensor to detect the presence of metals in the water—an issue that affects my home’s plumbing.
+
+-> Smart Safety Alarms and Automation: Extend system logic to trigger alarms and automated valve actions based on detected anomalies in temperature or water quality.
+
 The first version was made using an ATMEGA 168A, coded in assembly and all the assembled componnets were placed with loose wires in some protoboards. 
