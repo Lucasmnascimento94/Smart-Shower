@@ -1,0 +1,9 @@
+../Core/lib/lcd/touch.c:36:6:scan_g	6
+../Core/lib/lcd/touch.c:131:6:Set_ADC_Channel_GPIO	5
+../Core/lib/lcd/touch.c:165:6:scan_	14
+../Core/lib/lcd/touch.c:332:6:get_value	2
+../Core/lib/lcd/touch.c:345:6:sort_	5
+../Core/lib/lcd/touch.c:358:6:exchange	1
+../Core/lib/lcd/touch.c:364:6:read_pad	8
+../Core/lib/lcd/touch.c:399:6:get_button	20
+../Core/lib/lcd/touch.c:459:6:scan	14

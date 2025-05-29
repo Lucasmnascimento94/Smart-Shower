@@ -1,0 +1,11 @@
+../Core/Src/lib/equipments/temperature_control.c:10:5:reach_temperature	1
+../Core/Src/lib/equipments/temperature_control.c:13:5:get_rough_position	1
+../Core/Src/lib/equipments/temperature_control.c:16:6:update_temperature	1
+../Core/Src/lib/equipments/temperature_control.c:19:9:set_temperature	1
+../Core/Src/lib/equipments/temperature_control.c:22:6:enable_temperature_control	1
+../Core/Src/lib/equipments/temperature_control.c:25:6:disable_temperature_control	1
+../Core/Src/lib/equipments/temperature_control.c:29:5:VALVE_HANDLE_INIT	1
+../Core/Src/lib/equipments/temperature_control.c:32:6:STALL_HANDLE	7
+../Core/Src/lib/equipments/temperature_control.c:51:6:COMMAND_HANDLE	10
+../Core/Src/lib/equipments/temperature_control.c:100:6:VALVE_CONTROL_RUN	3
+../Core/Src/lib/equipments/temperature_control.c:112:6:PARSE_COMMAND	16

@@ -1,0 +1,17 @@
+../Core/lib/lcd/GUI.c:56:6:GUI_DrawPoint	1
+../Core/lib/lcd/GUI.c:81:6:LCD_Fill	3
+../Core/lib/lcd/GUI.c:106:6:LCD_ShowChar	8
+../Core/lib/lcd/GUI.c:149:6:LCD_ShowString	6
+../Core/lib/lcd/GUI.c:169:6:keypad	3
+../Core/lib/lcd/GUI.c:210:6:draw_terminal	1
+../Core/lib/lcd/GUI.c:228:6:draw_var	1
+../Core/lib/lcd/GUI.c:243:6:printf_	5
+../Core/lib/lcd/GUI.c:276:6:printf_g	1
+../Core/lib/lcd/GUI.c:281:6:addLine	2
+../Core/lib/lcd/GUI.c:298:6:LCD_UpdateTypedTemp	1
+../Core/lib/lcd/GUI.c:307:6:draw_futuristic_background	6
+../Core/lib/lcd/GUI.c:331:6:drawLine	7
+../Core/lib/lcd/GUI.c:344:6:stampSquare	3
+../Core/lib/lcd/GUI.c:352:6:drawThickLine	7
+../Core/lib/lcd/GUI.c:371:6:draw_circle	3
+../Core/lib/lcd/GUI.c:398:6:draw_circle_filled	3

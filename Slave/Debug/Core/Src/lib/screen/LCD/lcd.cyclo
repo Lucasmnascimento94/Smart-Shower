@@ -1,0 +1,12 @@
+../Core/Src/lib/screen/LCD/lcd.c:75:6:LCD_WR_REG	1
+../Core/Src/lib/screen/LCD/lcd.c:90:6:LCD_WR_DATA	1
+../Core/Src/lib/screen/LCD/lcd.c:108:6:LCD_WriteReg	1
+../Core/Src/lib/screen/LCD/lcd.c:121:6:LCD_WriteRAM_Prepare	1
+../Core/Src/lib/screen/LCD/lcd.c:133:6:Lcd_WriteData_16Bit	1
+../Core/Src/lib/screen/LCD/lcd.c:152:6:LCD_DrawPoint	1
+../Core/Src/lib/screen/LCD/lcd.c:165:6:LCD_Clear	3
+../Core/Src/lib/screen/LCD/lcd.c:206:6:LCD_RESET	1
+../Core/Src/lib/screen/LCD/lcd.c:221:6:LCD_Init	1
+../Core/Src/lib/screen/LCD/lcd.c:335:6:LCD_SetWindows	1
+../Core/Src/lib/screen/LCD/lcd.c:360:6:LCD_SetCursor	1
+../Core/Src/lib/screen/LCD/lcd.c:375:6:LCD_direction	5

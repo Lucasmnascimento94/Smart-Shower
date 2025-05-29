@@ -1,0 +1,13 @@
+../Core/Src/lib/screen/screen.c:8:6:WRITE_COMMAND	16	static
+../Core/Src/lib/screen/screen.c:17:6:WRITE_DATA	16	static
+../Core/Src/lib/screen/screen.c:24:6:WRITE_DATA_16B	24	static
+../Core/Src/lib/screen/screen.c:34:6:READ_COMMAND	16	static
+../Core/Src/lib/screen/screen.c:41:6:READ_DATA	16	static
+../Core/Src/lib/screen/screen.c:48:6:SCREEN_RESET	16	static
+../Core/Src/lib/screen/screen.c:55:6:SCREEN_INIT	16	static
+../Core/Src/lib/screen/screen.c:151:6:GET_IDS	16	static
+../Core/Src/lib/screen/screen.c:157:6:SET_WINDOW	16	static
+../Core/Src/lib/screen/screen.c:172:6:scan	288	static
+../Core/Src/lib/screen/screen.c:247:6:read_col	16	static
+../Core/Src/lib/screen/screen.c:260:6:read_row	16	static
+../Core/Src/lib/screen/screen.c:276:6:get_button	32	static

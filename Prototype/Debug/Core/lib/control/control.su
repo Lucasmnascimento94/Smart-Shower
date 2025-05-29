@@ -1,0 +1,4 @@
+../Core/lib/control/control.c:4:6:CMD_HANDLER	120	static
+../Core/lib/control/control.c:55:6:HANDLE	16	static
+../Core/lib/control/control.c:69:6:PARSE_COMMAND	16	static
+../Core/lib/control/control.c:92:6:LCD_COMMAND_HANDLER	16	static

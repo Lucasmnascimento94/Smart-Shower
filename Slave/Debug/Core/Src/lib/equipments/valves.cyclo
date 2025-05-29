@@ -1,0 +1,13 @@
+../Core/Src/lib/equipments/valves.c:4:5:VALVE_MODE_STANDBY	1
+../Core/Src/lib/equipments/valves.c:11:5:VALVE_MODE_FULL_CW	1
+../Core/Src/lib/equipments/valves.c:17:5:VALVE_MODE_1_2A_CW	1
+../Core/Src/lib/equipments/valves.c:23:5:VALVE_MODE_1_2B_CW	1
+../Core/Src/lib/equipments/valves.c:29:5:VALVE_MODE_1_4_CW	1
+../Core/Src/lib/equipments/valves.c:35:5:VALVE_MODE_1_8_CW	1
+../Core/Src/lib/equipments/valves.c:41:5:VALVE_MODE_1_16_CW	1
+../Core/Src/lib/equipments/valves.c:48:5:VALVE_CONTROL_CW_STEP	2
+../Core/Src/lib/equipments/valves.c:73:5:VALVE_CONTROL_CCW_STEP	2
+../Core/Src/lib/equipments/valves.c:98:5:VALVE_CONTROL_APROX	3
+../Core/Src/lib/equipments/valves.c:109:5:VALVE_CONTROL_HANDLE	3
+../Core/Src/lib/equipments/valves.c:121:6:VALVE_CONTROL_HANDLE_INIT	3
+../Core/Src/lib/equipments/valves.c:143:6:FLASH_HANDLE	1

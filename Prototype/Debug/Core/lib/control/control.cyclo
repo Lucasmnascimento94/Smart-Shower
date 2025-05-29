@@ -1,0 +1,4 @@
+../Core/lib/control/control.c:4:6:CMD_HANDLER	6
+../Core/lib/control/control.c:55:6:HANDLE	4
+../Core/lib/control/control.c:69:6:PARSE_COMMAND	16
+../Core/lib/control/control.c:92:6:LCD_COMMAND_HANDLER	6

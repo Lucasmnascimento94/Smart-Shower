@@ -1,0 +1,2 @@
+../Core/Src/lib/serial_printing/serial_printing.c:10:6:print_f_array	1
+../Core/Src/lib/serial_printing/serial_printing.c:14:6:print_hex_f_array	7
