@@ -1,0 +1,835 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "27d2bf7f-c489-4213-967e-cce53c98971e")
+	(paper "A4")
+	(lib_symbols)
+	(wire
+		(pts
+			(xy 156.21 68.58) (xy 171.45 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0162c3aa-004e-4d28-b481-6bdec096999e")
+	)
+	(wire
+		(pts
+			(xy 158.75 72.39) (xy 158.75 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11c92b12-8182-435f-8fd1-6c48200af966")
+	)
+	(wire
+		(pts
+			(xy 95.25 63.5) (xy 120.65 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12ac9429-b08b-498e-acc3-bbee6cb284f5")
+	)
+	(wire
+		(pts
+			(xy 95.25 50.8) (xy 120.65 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15740d9f-cdee-433f-beb8-395770418c66")
+	)
+	(wire
+		(pts
+			(xy 146.05 69.85) (xy 156.21 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32b1cd36-72a2-491c-8267-b1f63a8d42bf")
+	)
+	(wire
+		(pts
+			(xy 158.75 64.77) (xy 158.75 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "36788624-f978-4238-8282-21ae6eb6eb15")
+	)
+	(wire
+		(pts
+			(xy 95.25 68.58) (xy 120.65 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37fef5d4-5a01-4d66-86ee-39e966a9dcab")
+	)
+	(wire
+		(pts
+			(xy 95.25 71.12) (xy 120.65 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "414384e1-a628-43a6-b4c7-b86de49130cf")
+	)
+	(wire
+		(pts
+			(xy 152.4 63.5) (xy 152.4 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "495e1ed1-3c49-4873-9b57-8c8d4bfd0321")
+	)
+	(wire
+		(pts
+			(xy 146.05 52.07) (xy 171.45 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4ef733cf-6735-43f5-9908-ff0aed71f2ea")
+	)
+	(wire
+		(pts
+			(xy 146.05 63.5) (xy 152.4 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5dc51a3b-2e32-405d-9043-969477ce18a9")
+	)
+	(wire
+		(pts
+			(xy 95.25 60.96) (xy 120.65 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6b428621-7a34-422d-a91b-809c0f497b58")
+	)
+	(wire
+		(pts
+			(xy 156.21 63.5) (xy 171.45 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "739a895c-b9da-449e-bad0-36bbc22f7363")
+	)
+	(wire
+		(pts
+			(xy 158.75 71.12) (xy 171.45 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ed425a3-f5d6-4c5d-b35a-76264e62687c")
+	)
+	(wire
+		(pts
+			(xy 146.05 72.39) (xy 158.75 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "808ecd71-58ed-41f8-883f-dfbfea81049a")
+	)
+	(wire
+		(pts
+			(xy 146.05 66.04) (xy 156.21 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87551aea-be14-4a7c-b626-d0e263677c3b")
+	)
+	(wire
+		(pts
+			(xy 95.25 55.88) (xy 120.65 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88701f29-dda1-4325-a87a-25fe1745ecf7")
+	)
+	(wire
+		(pts
+			(xy 146.05 54.61) (xy 171.45 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "961d333d-1f2a-49e9-97a8-cc07bd273c35")
+	)
+	(wire
+		(pts
+			(xy 146.05 60.96) (xy 171.45 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9da6da1a-cf98-43ad-94ba-0f66e336c9bb")
+	)
+	(wire
+		(pts
+			(xy 95.25 73.66) (xy 120.65 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a60f8500-833b-4f3f-9177-e3b239e55a3f")
+	)
+	(wire
+		(pts
+			(xy 158.75 66.04) (xy 171.45 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab4e2051-fbc8-41ad-89b4-af640aa2c9f7")
+	)
+	(wire
+		(pts
+			(xy 95.25 66.04) (xy 120.65 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab5cfd9b-7be6-4bd1-9968-e5af2f7f9106")
+	)
+	(wire
+		(pts
+			(xy 152.4 64.77) (xy 158.75 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb747c51-65b7-4bd8-b091-089618c99377")
+	)
+	(wire
+		(pts
+			(xy 95.25 58.42) (xy 120.65 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1fe6c48-ab8e-4125-b390-713dfa223e1c")
+	)
+	(wire
+		(pts
+			(xy 156.21 69.85) (xy 156.21 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6974ed6-ab55-48e7-80d2-8739ff24d6ca")
+	)
+	(wire
+		(pts
+			(xy 156.21 66.04) (xy 156.21 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f296b08e-2f72-4b0b-bbad-f6951ef17ff7")
+	)
+	(wire
+		(pts
+			(xy 146.05 58.42) (xy 171.45 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f683715e-9249-437f-8c95-2bba14709a1c")
+	)
+	(wire
+		(pts
+			(xy 95.25 53.34) (xy 120.65 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "feb26a9d-a5f6-4b41-b0b7-598999e66383")
+	)
+	(wire
+		(pts
+			(xy 95.25 76.2) (xy 120.65 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ffe19630-c8ae-435b-8c3c-5269613547d5")
+	)
+	(sheet
+		(at 78.105 44.45)
+		(size 17.145 34.925)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "0a48d93a-233d-46a3-aaff-17ad42032274")
+		(property "Sheetname" "TB6600FG_1"
+			(at 78.105 43.7384 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "TB6600FG_sch.kicad_sch"
+			(at 78.105 79.9596 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "RESET" input
+			(at 95.25 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "5561d2cf-6ea6-4797-b375-aa3f3dc40fd8")
+		)
+		(pin "CW{slash}CCW" input
+			(at 95.25 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "d201cd93-adf5-4a14-b0c2-e646b270a1ac")
+		)
+		(pin "Latch" input
+			(at 95.25 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "3092d546-cb39-4639-b4cd-1d266d4644c3")
+		)
+		(pin "ENABLE" input
+			(at 95.25 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "8431555a-6f9a-4b12-8373-b0034b9987c7")
+		)
+		(pin "CLK" input
+			(at 95.25 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "8be40e37-a473-49a0-991b-1877638d7d8c")
+		)
+		(pin "TQ" input
+			(at 95.25 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "9c63e374-e9cd-4d05-9617-1a5b77ab576e")
+		)
+		(pin "M0" input
+			(at 95.25 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "37a7cc05-e88b-4b1f-835e-1f35bd4ed1bc")
+		)
+		(pin "M1" input
+			(at 95.25 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "4aa3ee9c-baa1-4f44-9c5b-fc1905260f20")
+		)
+		(pin "M2" input
+			(at 95.25 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "a3b160c4-dc9c-4fe3-aacc-9d312385ccb1")
+		)
+		(pin "M3" input
+			(at 95.25 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "fc2479fd-bea7-4c69-9dbb-1f67bcce5a7b")
+		)
+		(pin "Alert" input
+			(at 95.25 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "862b7fe3-efc3-43f5-9547-b22dc058f9da")
+		)
+		(instances
+			(project "StartTech_Valve"
+				(path "/27d2bf7f-c489-4213-967e-cce53c98971e"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 120.65 48.26)
+		(size 25.4 34.925)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "0c155b93-3119-4d36-8c4f-ed2f0e73a404")
+		(property "Sheetname" "STM32F411RCT6"
+			(at 120.65 47.5484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "STM32F411RCT6.kicad_sch"
+			(at 120.65 83.7696 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "Valve_M1" input
+			(at 120.65 50.8 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "dc85aa07-c06a-4574-aa62-531d29cfc60e")
+		)
+		(pin "Valve_M2" input
+			(at 120.65 53.34 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "24ccbc08-48a0-4e97-b5c2-b9c6c4dfd447")
+		)
+		(pin "Valve_M3" input
+			(at 120.65 55.88 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "82b49d18-dc9c-449d-bbd7-474f2e8f53ef")
+		)
+		(pin "Valve_EN" input
+			(at 120.65 58.42 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "88530edf-d717-425a-8efc-798059664190")
+		)
+		(pin "ESP_RST" input
+			(at 146.05 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "17f2493c-d06a-4e97-8588-e3e0c1d52ab7")
+		)
+		(pin "Valve_RST" input
+			(at 120.65 60.96 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "dcb06daa-66a6-4ce8-822c-0c439e2f2735")
+		)
+		(pin "Valve_CLK" input
+			(at 120.65 63.5 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "ca21ac9b-ce96-41a5-8cbe-4fd25416bcfc")
+		)
+		(pin "Valve_CCW" input
+			(at 120.65 66.04 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "b24d9ac0-284b-4bda-a423-6cf21b91f7fc")
+		)
+		(pin "Valve_LATCH" input
+			(at 120.65 68.58 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "3278f6a4-b778-404a-8c58-8f0847882a7c")
+		)
+		(pin "Valve_TQ" input
+			(at 120.65 71.12 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "cef31567-de25-4aae-9fe2-6106ad4bb7fa")
+		)
+		(pin "Valve_M0" input
+			(at 120.65 73.66 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "4e6c3b98-1503-4548-8429-e3fec7c9f9e4")
+		)
+		(pin "Valve_ALERT" input
+			(at 120.65 76.2 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "3e01df43-2dc3-4b62-9130-ab02dd0277dd")
+		)
+		(pin "ESP_EN" input
+			(at 146.05 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "46621057-db4c-46e2-9919-40e87b39df59")
+		)
+		(pin "ESP_RTS" input
+			(at 146.05 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "f79f196c-c800-4a25-943e-08a5c4ae837f")
+		)
+		(pin "ESP_GPIO4" input
+			(at 146.05 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "3231a52e-1ccb-4d0f-bbe3-e16d31fcbbe7")
+		)
+		(pin "ESP_GPIO5" input
+			(at 146.05 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "9b3ba3db-091a-43e9-b254-62410e87267e")
+		)
+		(pin "ESP_CTS" input
+			(at 146.05 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "78f49fa5-cf03-4198-9e1e-520231b2e514")
+		)
+		(pin "UART1_RX" input
+			(at 146.05 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "e7851496-3216-4160-a6af-9ed2d358488e")
+		)
+		(pin "UART1_TX" input
+			(at 146.05 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "d40adae2-896d-4094-9894-cf64d6189231")
+		)
+		(instances
+			(project "StartTech_Valve"
+				(path "/27d2bf7f-c489-4213-967e-cce53c98971e"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 17.145 15.24)
+		(size 34.29 55.245)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "0dc918c4-c87e-4dfb-ad8b-3ff4f09191fa")
+		(property "Sheetname" "power"
+			(at 17.145 14.5284 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power_sch.kicad_sch"
+			(at 17.145 71.0696 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "StartTech_Valve"
+				(path "/27d2bf7f-c489-4213-967e-cce53c98971e"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 171.45 44.45)
+		(size 25.4 38.1)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b3016e66-bdf3-438f-aa11-47196fe562c5")
+		(property "Sheetname" "ESP-12E"
+			(at 171.45 43.7384 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ESP-12E.kicad_sch"
+			(at 171.45 83.1346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "RST" input
+			(at 171.45 68.58 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "24a813e2-bf8b-4959-838e-393e75c90dd5")
+		)
+		(pin "EN" input
+			(at 171.45 71.12 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "d07b2581-f130-4cb0-8924-f02c92aea8cd")
+		)
+		(pin "CTS" input
+			(at 171.45 54.61 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "5a314d29-8aaf-4836-a582-c6628862d3cd")
+		)
+		(pin "RTS" input
+			(at 171.45 52.07 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "abc4100c-26be-46ea-becc-7f3dbcbb46bd")
+		)
+		(pin "IO4" input
+			(at 171.45 58.42 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "a328f9f1-1120-42d1-b008-257f514c4fc9")
+		)
+		(pin "IO5" input
+			(at 171.45 60.96 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "7dc38173-88c4-4e10-b66d-efc356e08101")
+		)
+		(pin "TXD" input
+			(at 171.45 66.04 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "12c82d55-2adb-426a-b3fc-a572e89276f0")
+		)
+		(pin "RXD" input
+			(at 171.45 63.5 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "199e7d64-111d-4a48-abf4-93600a5db956")
+		)
+		(instances
+			(project "StartTech_Valve"
+				(path "/27d2bf7f-c489-4213-967e-cce53c98971e"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)
