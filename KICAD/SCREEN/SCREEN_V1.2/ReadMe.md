@@ -7,7 +7,7 @@
 
 | Added Component   | Datasheet|
 | ---------------:  | ---------|
-| LM2576T-ADJ/NOPB  | https://www.ti.com/general/docs/suppproductinfo.tsp?distId=10&gotoUrl=https%3A%2F%2Fwww.ti.com%2Flit%2Fgpn%2Flm2576hv| 
+|LM2576T-ADJ/NOPB  | https://www.ti.com/general/docs/suppproductinfo.tsp?distId=10&gotoUrl=https%3A%2F%2Fwww.ti.com%2Flit%2Fgpn%2Flm2576hv| 
 
 | Removed Component | Datasheet|
 | ---------------:  | ---------|
