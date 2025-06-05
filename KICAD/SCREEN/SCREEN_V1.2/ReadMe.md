@@ -8,3 +8,7 @@
 | Added Component  | Datasheet|
 | ---------------: | ---------|
 | LM2576T-ADJ/NOPB | https://www.ti.com/general/docs/suppproductinfo.tsp?distId=10&gotoUrl=https%3A%2F%2Fwww.ti.com%2Flit%2Fgpn%2Flm2576hv| 
+
+| Removed Component | Datasheet|
+| ---------------:  | ---------|
+|AMS1117-3.3        | https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/6782/5272_AMS1117-3.3%20SOT-223.PDF |
