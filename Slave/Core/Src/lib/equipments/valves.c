@@ -123,6 +123,7 @@ void VALVE_CONTROL_HANDLE_INIT(Valve *valve){
 	uint32_t *p = (uint32_t *)FLASH_ADDRESS;
 	int h = (int)*p;
 	while(h !=0){
+		int temp= (int)*p;
 		if(h > 0){
 			VALVE_CONTROL_CW_STEP(1 , valve);
 			h--;
@@ -132,11 +133,10 @@ void VALVE_CONTROL_HANDLE_INIT(Valve *valve){
 			h++;
 		}
 		LCD_UpdateOpening(h);
+		LCD_UpdateFlash(temp);
 	}
-
-	FLASH_HANDLE(valve->steps + h);
-	h = (int)*p;
-	valve->steps = h;
+	valve->steps = 0;
+	FLASH_HANDLE(0);
 }
 
 

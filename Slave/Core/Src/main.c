@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -63,6 +64,54 @@ TIM_HandleTypeDef htim11;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
+/* Definitions for Main */
+osThreadId_t MainHandle;
+const osThreadAttr_t Main_attributes = {
+  .name = "Main",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for Valve */
+osThreadId_t ValveHandle;
+const osThreadAttr_t Valve_attributes = {
+  .name = "Valve",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for Uart */
+osThreadId_t UartHandle;
+const osThreadAttr_t Uart_attributes = {
+  .name = "Uart",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for ds18b20 */
+osThreadId_t ds18b20Handle;
+const osThreadAttr_t ds18b20_attributes = {
+  .name = "ds18b20",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for mainMutex */
+osMutexId_t mainMutexHandle;
+const osMutexAttr_t mainMutex_attributes = {
+  .name = "mainMutex"
+};
+/* Definitions for valveMutex */
+osMutexId_t valveMutexHandle;
+const osMutexAttr_t valveMutex_attributes = {
+  .name = "valveMutex"
+};
+/* Definitions for uartMutex */
+osMutexId_t uartMutexHandle;
+const osMutexAttr_t uartMutex_attributes = {
+  .name = "uartMutex"
+};
+/* Definitions for ds18b20Mutex */
+osMutexId_t ds18b20MutexHandle;
+const osMutexAttr_t ds18b20Mutex_attributes = {
+  .name = "ds18b20Mutex"
+};
 /* USER CODE BEGIN PV */
 uint8_t buffer[1];
 uint8_t flag;
@@ -151,8 +200,13 @@ static void MX_TIM3_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM11_Init(void);
-static void MX_TIM2_Init(void);
 static void MX_SPI4_Init(void);
+static void MX_TIM2_Init(void);
+void mainFunction(void *argument);
+void valveFunction(void *argument);
+void uartFunction(void *argument);
+void ds18b20Function(void *argument);
+
 /* USER CODE BEGIN PFP */
 void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);
 void getFloatString(char *buffer, float number);
@@ -204,8 +258,8 @@ int main(void)
   MX_TIM10_Init();
   MX_SPI2_Init();
   MX_TIM11_Init();
-  MX_TIM2_Init();
   MX_SPI4_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   TIMER_US_INIT();
   LCD_Init();
@@ -236,12 +290,69 @@ int main(void)
 
   // Handle initial positioning -> Return valve to its 0 positioning
   // Raise STALL flag if Hot temperature is lower then minimum
-  //VALVE_CONTROL_HANDLE_INIT(&valve);
+  VALVE_CONTROL_HANDLE_INIT(&valve);
   h = *p;
   //char msg[20] = "HELLO YOU BUSY";
   LCD_UpdateFlash(h);
   HAL_Delay(1000);
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+  /* Create the mutex(es) */
+  /* creation of mainMutex */
+  mainMutexHandle = osMutexNew(&mainMutex_attributes);
+
+  /* creation of valveMutex */
+  valveMutexHandle = osMutexNew(&valveMutex_attributes);
+
+  /* creation of uartMutex */
+  uartMutexHandle = osMutexNew(&uartMutex_attributes);
+
+  /* creation of ds18b20Mutex */
+  ds18b20MutexHandle = osMutexNew(&ds18b20Mutex_attributes);
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of Main */
+  MainHandle = osThreadNew(mainFunction, NULL, &Main_attributes);
+
+  /* creation of Valve */
+  ValveHandle = osThreadNew(valveFunction, NULL, &Valve_attributes);
+
+  /* creation of Uart */
+  UartHandle = osThreadNew(uartFunction, NULL, &Uart_attributes);
+
+  /* creation of ds18b20 */
+  ds18b20Handle = osThreadNew(ds18b20Function, NULL, &ds18b20_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -250,7 +361,7 @@ int main(void)
 
 	while(1){
     /* USER CODE END WHILE */
-		//LCD_typeDebug("looping");
+
     /* USER CODE BEGIN 3 */
 		// Handle command flags
 		COMMAND_HANDLE(&htim10, &htim2, &command);
@@ -441,9 +552,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 19999;
+  htim2.Init.Prescaler = 59999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 19999;
+  htim2.Init.Period = 79999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -735,7 +846,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(OneWire_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
@@ -756,6 +867,99 @@ void getFloatString(char *buffer, float number){
 void ERR_INIT(ERR_STRING *err_String){
 }
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_mainFunction */
+/**
+  * @brief  Function implementing the Main thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_mainFunction */
+void mainFunction(void *argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_valveFunction */
+/**
+* @brief Function implementing the Valve thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_valveFunction */
+void valveFunction(void *argument)
+{
+  /* USER CODE BEGIN valveFunction */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END valveFunction */
+}
+
+/* USER CODE BEGIN Header_uartFunction */
+/**
+* @brief Function implementing the Uart thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_uartFunction */
+void uartFunction(void *argument)
+{
+  /* USER CODE BEGIN uartFunction */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END uartFunction */
+}
+
+/* USER CODE BEGIN Header_ds18b20Function */
+/**
+* @brief Function implementing the ds18b20 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ds18b20Function */
+void ds18b20Function(void *argument)
+{
+  /* USER CODE BEGIN ds18b20Function */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ds18b20Function */
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
