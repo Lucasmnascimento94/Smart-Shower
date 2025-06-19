@@ -63,11 +63,11 @@ void COMMAND_HANDLE(TIM_HandleTypeDef *htim, TIM_HandleTypeDef *htim2, uint8_t *
 		*command = *command & (~IDLE);
 	}
 
-	if(!(ESP_CTS_GPIO_Port->IDR & ESP_CTS_Pin) && (cmd.status_busy)){
+	/*if(!(ESP_CTS_GPIO_Port->IDR & ESP_CTS_Pin) && (cmd.status_busy)){
 		PARSE_COMMAND();
 		cmd.status_busy = false;
 		memset(cmd.cmd_all, 0, sizeof(cmd.cmd_all));
-	}
+	}*/
 
 	if((act & CONTROLLER_COMMAND) == CONTROLLER_COMMAND){
 		act = act & (~CONTROLLER_COMMAND);

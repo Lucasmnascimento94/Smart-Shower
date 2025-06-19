@@ -63,6 +63,8 @@ TIM_HandleTypeDef htim11;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart1_tx;
 
 /* Definitions for Main */
 osThreadId_t MainHandle;
@@ -82,7 +84,7 @@ const osThreadAttr_t Valve_attributes = {
 osThreadId_t UartHandle;
 const osThreadAttr_t Uart_attributes = {
   .name = "Uart",
-  .stack_size = 128 * 4,
+  .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for ds18b20 */
@@ -189,11 +191,17 @@ CMD cmd = {
 };
 
 uint8_t rxBuffer[2] = {0};
+uint32_t FLAG_UART = 0x00;
+uint32_t len = 1024;
+uint8_t esp_uart_buffer_rx[1024*2];
+uint8_t esp_uart_buffer_tx[512];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM3_Init(void);
@@ -252,6 +260,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_TIM3_Init();
@@ -734,7 +743,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -748,6 +757,25 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
+  /* DMA2_Stream7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 
 }
 
@@ -777,7 +805,7 @@ static void MX_GPIO_Init(void)
                           |Valve_TQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, ESP_RST_Pin|ESP_RTS_Pin|ESP_IO4_Pin|ESP_IO5_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, ESP_RST_Pin|ESP_IO4_Pin|ESP_IO5_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LCD_RST_Pin|LCD_DC_Pin|T_CS_Pin|GPIO_PIN_7
@@ -804,18 +832,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ESP_RST_Pin ESP_RTS_Pin ESP_IO4_Pin ESP_IO5_Pin */
-  GPIO_InitStruct.Pin = ESP_RST_Pin|ESP_RTS_Pin|ESP_IO4_Pin|ESP_IO5_Pin;
+  /*Configure GPIO pin : ESP_RST_Pin */
+  GPIO_InitStruct.Pin = ESP_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(ESP_RST_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ESP_CTS_Pin */
-  GPIO_InitStruct.Pin = ESP_CTS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pins : ESP_IO4_Pin ESP_IO5_Pin */
+  GPIO_InitStruct.Pin = ESP_IO4_Pin|ESP_IO5_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ESP_CTS_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LCD_RST_Pin LCD_DC_Pin T_CS_Pin PB7
                            ESP_EN_Pin LCD_CSB9_Pin */
@@ -864,7 +893,105 @@ void getFloatString(char *buffer, float number){
 	sprintf(buffer, "%d,%d", intNumber, floatNumber);
 }
 
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
+    if (huart->Instance == USART1) {
+        if (Size < sizeof(esp_uart_buffer_rx)) {
+        	esp_uart_buffer_rx[Size] = '\0';
+        }
+
+        SET_CTS;      // Clear CTS
+
+        FLAG_UART |= ESP_MSG_COMPLETE;
+
+        // Stop DMA manually if needed (prevents re-trigger)
+        HAL_UART_DMAStop(huart);  // Prevent retrigger
+    }
+}
+
+
 void ERR_INIT(ERR_STRING *err_String){
+}
+
+
+void SET_UP_DMAT(){
+	// hdma_usart1_tx
+	//_HAL_DMA_DISABLE(huart1.hdmatx);
+	uint32_t DMA_CR = 0x00;
+	SET_BIT(huart1.Instance->CR3, USART_CR3_DMAT); // Enable DMA Transmitter
+
+	DMA_CR |= 0x02 << 16; // Priority Level (high)
+	DMA_CR |= 0x01 << 6; // Data transfer direction (Memory-to-Peripheral)
+	DMA_CR |= 0x01 << 4; // Transfer complete interrupt (Enabled)
+
+
+	WRITE_REG(huart1.hdmatx->Instance->NDTR, sizeof(esp_uart_buffer_tx));
+	WRITE_REG(huart1.hdmatx->Instance->PAR, (uint32_t)&(huart1.Instance->DR)); // Destination Address
+	WRITE_REG(huart1.hdmatx->Instance->M0AR, (uint32_t)esp_uart_buffer_tx); // Source Base Address
+	WRITE_REG(huart1.hdmatx->Instance->CR, DMA_CR);
+}
+
+void SET_UP_DMAR(){
+	  // DMA stream disable if running
+	  __HAL_DMA_DISABLE(huart1.hdmarx);
+
+	  // Set peripheral address (USARTx->RDR)
+	  WRITE_REG(huart1.hdmarx->Instance->PAR, (uint32_t)&(huart1.Instance->DR));
+
+	  // Set memory address
+	  WRITE_REG(huart1.hdmarx->Instance->M0AR, (uint32_t)esp_uart_buffer_rx);
+
+	  // Set size
+	  MODIFY_REG(huart1.hdmarx->Instance->NDTR, DMA_SxNDT, sizeof(esp_uart_buffer_rx));
+
+	  // Enable DMA request from UART
+	  SET_BIT(huart1.Instance->CR3, USART_CR3_DMAR);
+
+	  // Enable DMA stream
+	  SET_BIT(huart1.hdmarx->Instance->CR, DMA_SxCR_EN);
+
+	  // Update HAL internals
+	  huart1.pRxBuffPtr = esp_uart_buffer_rx;
+	  huart1.RxXferSize = sizeof(esp_uart_buffer_rx);
+	  huart1.ReceptionType = HAL_UART_RECEPTION_TOIDLE;
+	  huart1.RxEventType = HAL_UART_RXEVENT_TC;
+
+	  // Enable IDLE interrupt
+	  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+
+	  // Enable UART
+	  __HAL_UART_ENABLE(&huart1);
+}
+
+void RESET_DMAR(){
+	__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);  // Disable idle interrupt
+	  HAL_UART_DMAStop(&huart1);                     // Stop DMA cleanly
+	  __HAL_DMA_DISABLE(huart1.hdmarx);              // Ensure DMA off
+	  __HAL_DMA_CLEAR_FLAG(huart1.hdmarx, __HAL_DMA_GET_TC_FLAG_INDEX(huart1.hdmarx));  // Clear flags
+	  __HAL_DMA_ENABLE(huart1.hdmarx);               // Re-enable DMA
+	  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // Re-enable idle IRQ
+	  huart1.RxState = HAL_UART_STATE_READY;
+	  osDelay(100);
+}
+
+void UART_DMA_MFLAG(uint32_t flag){
+	  if(flag == HAL_BUSY){
+		  char msg1[100] = "UART FUNCTION THREAD - DMA BUSY\n";
+		  HAL_UART_Transmit(&huart2, (uint8_t *)msg1,strlen(msg1), 100);
+	  }
+	  if(flag == HAL_TIMEOUT){
+		  char msg2[100] = "UART FUNCTION THREAD - DMA TIMEOUT\n";
+		  HAL_UART_Transmit(&huart2, (uint8_t *)msg2,strlen(msg2), 100);
+	  }
+	  if(flag == HAL_ERROR){
+		  char msg3[100] = "UART FUNCTION THREAD - DMA ERROR\n";
+		  HAL_UART_Transmit(&huart2, (uint8_t *)msg3,strlen(msg3), 100);
+	  }
+
+	  if(flag == HAL_OK){
+		  char msg4[100] = "UART FUNCTION THREAD - DMA OK\n";
+		  HAL_UART_Transmit(&huart2, (uint8_t *)msg4,strlen(msg4), 100);
+	  }
 }
 /* USER CODE END 4 */
 
@@ -878,10 +1005,13 @@ void ERR_INIT(ERR_STRING *err_String){
 void mainFunction(void *argument)
 {
   /* USER CODE BEGIN 5 */
+	osDelay(200);
+	char msg[100] = "MAIN FUNCTION THREAD\n";
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	  HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }
@@ -896,10 +1026,13 @@ void mainFunction(void *argument)
 void valveFunction(void *argument)
 {
   /* USER CODE BEGIN valveFunction */
+	osDelay(200);
+	char msg[100] = "VALVE FUNCTION THREAD\n";
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	  HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+    osDelay(500);
   }
   /* USER CODE END valveFunction */
 }
@@ -914,10 +1047,41 @@ void valveFunction(void *argument)
 void uartFunction(void *argument)
 {
   /* USER CODE BEGIN uartFunction */
+  FLAG_UART = 0x00;
+  SET_CTS;
+  SET_RTS;
+
+  osDelay(2000);
+  HAL_StatusTypeDef result;
+  SET_UP_DMAR();
+  //SET_UP_DMAT();
+  //memset(esp_uart_buffer, 0, sizeof(esp_uart_buffer));
+  char msg[100] = "UART FUNCTION THREAD\n";
+
+  // HAL_StatusTypeDef HAL_UART_Transmit_DMA(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	  if(!(GPIOA->IDR & GPIO_IDR_ID6) && !(FLAG_UART & ESP_MSG_READY)){
+		  RESET_DMAR();
+		  result = HAL_UARTEx_ReceiveToIdle_DMA(&huart1, esp_uart_buffer_rx, sizeof(esp_uart_buffer_rx));
+		  if(result == HAL_OK){
+			  osDelay(50);
+			  FLAG_UART |= ESP_MSG_READY;
+			  RESET_CTS;
+		  }
+	  }
+	  UART_DMA_MFLAG(result);
+
+	  if((FLAG_UART & ESP_MSG_READY) && (FLAG_UART & ESP_MSG_COMPLETE)){
+		  HAL_UART_Transmit(&huart2, (uint8_t *)"CALLBACK FIRED\n", 15, 100);
+	        HAL_UART_Transmit(&huart2, esp_uart_buffer_rx, strlen((char *)esp_uart_buffer_rx), 100);
+	        FLAG_UART &= ~(ESP_MSG_READY | ESP_MSG_COMPLETE);
+	        memset(esp_uart_buffer_rx, 0, sizeof(esp_uart_buffer_rx));
+	  }
+	 // HAL_UART_Transmit(&huart2, esp_uart_buffer, strlen((char *)esp_uart_buffer), 100);
+	HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+    osDelay(1000);
   }
   /* USER CODE END uartFunction */
 }
@@ -932,10 +1096,13 @@ void uartFunction(void *argument)
 void ds18b20Function(void *argument)
 {
   /* USER CODE BEGIN ds18b20Function */
+	osDelay(200);
+  char msg[100] = "DS18B20 FUNCTION THREAD\n";
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+    osDelay(500);
   }
   /* USER CODE END ds18b20Function */
 }

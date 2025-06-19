@@ -24,6 +24,7 @@ C_DEPS :=
 SUBDIRS := \
 Core/Src \
 Core/Src/lib/ESP \
+Core/Src/lib/UART_FUNC \
 Core/Src/lib/ds18b20_lib \
 Core/Src/lib/equipments \
 Core/Src/lib/screen/LCD \

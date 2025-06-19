@@ -23,6 +23,7 @@ RM := rm -rf
 -include Core/Src/lib/screen/subdir.mk
 -include Core/Src/lib/equipments/subdir.mk
 -include Core/Src/lib/ds18b20_lib/subdir.mk
+-include Core/Src/lib/UART_FUNC/subdir.mk
 -include Core/Src/lib/ESP/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk

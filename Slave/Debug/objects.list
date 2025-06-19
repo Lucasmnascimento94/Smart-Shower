@@ -7,6 +7,7 @@
 "./Core/Src/sysmem.o"
 "./Core/Src/system_stm32f4xx.o"
 "./Core/Src/lib/ESP/esp.o"
+"./Core/Src/lib/UART_FUNC/uart.o"
 "./Core/Src/lib/ds18b20_lib/ds18b20.o"
 "./Core/Src/lib/equipments/pumps.o"
 "./Core/Src/lib/equipments/temperature_control.o"

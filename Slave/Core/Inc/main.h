@@ -71,10 +71,6 @@ void Error_Handler(void);
 #define Valve_EN_GPIO_Port GPIOC
 #define ESP_RST_Pin GPIO_PIN_0
 #define ESP_RST_GPIO_Port GPIOA
-#define ESP_RTS_Pin GPIO_PIN_4
-#define ESP_RTS_GPIO_Port GPIOA
-#define ESP_CTS_Pin GPIO_PIN_5
-#define ESP_CTS_GPIO_Port GPIOA
 #define ESP_IO4_Pin GPIO_PIN_6
 #define ESP_IO4_GPIO_Port GPIOA
 #define ESP_IO5_Pin GPIO_PIN_7
