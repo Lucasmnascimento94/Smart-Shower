@@ -23,6 +23,7 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Core/Src \
+Core/Src/lib/DMA \
 Core/Src/lib/ESP \
 Core/Src/lib/UART_FUNC \
 Core/Src/lib/ds18b20_lib \

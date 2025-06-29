@@ -40,7 +40,7 @@ extern uint8_t esp_uart_buffer_tx[512];
 
 /*#######################################################################################################
 #########################################################################################################
-# 	 	 	 	 	 	 	 	 	 	    GLOBAL FLAGS                                                #
+# 	 	 	 	 	 	 	 	 	 	    ESP FLAGS AND TYPES                                         #
 #########################################################################################################
 #########################################################################################################
 */
@@ -50,9 +50,21 @@ extern uint32_t FLAG_UART;
 #define ESP_MSG_READY 0x01
 #define ESP_MSG_COMPLETE 0x02
 #define ESP_MSG_ACK 0x04
+#define ESP_MSG_ACK_SENT 0x08
+#define ESP_MSG_ACK_COMPLETE 0x10
 
-#define ESP_RTS_STM_SET 0x08 // RTS FLAG RAISED BY STM
-#define ESP_CTS_STM_SET 0x10 // CTS FLAG RAISED BY STM
+typedef struct{
+	uint8_t esp_uart_buffer_tx[100];
+	uint8_t esp_uart_buffer_rx[100];
+	uint8_t esp_buffer[100];
+	uint16_t checksum;
+	char checksum_s[20];
+	HAL_StatusTypeDef rx_status;
+	HAL_StatusTypeDef tx_status;
+	UART_HandleTypeDef *huart;
+	UART_HandleTypeDef *huart_test;
+}ESP_DATA_CONTROL;
+
 
 /*#######################################################################################################
 #########################################################################################################
@@ -233,4 +245,5 @@ extern CMD cmd;
 extern uint8_t act;
 extern Button button;
 extern Valve valve;
+extern ESP_DATA_CONTROL esp;
 #endif

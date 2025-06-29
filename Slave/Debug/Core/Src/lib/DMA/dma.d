@@ -1,4 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+Core/Src/lib/DMA/dma.o: ../Core/Src/lib/DMA/dma.c \
+ ../Core/Src/lib/DMA/dma.h ../Core/Inc/types.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -28,6 +29,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
@@ -38,22 +40,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Core/Inc/types.h ../Core/Inc/main.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/timer_us/timer_us.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/GUI.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/FONT.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/equipments/pumps.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/equipments/temperature_control.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/ds18b20_lib/DS18B20.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/test.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/ESP/esp.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h
-../Core/Inc/main.h:
+ ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+../Core/Src/lib/DMA/dma.h:
+../Core/Inc/types.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -83,6 +72,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Core/Inc/main.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -94,18 +84,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-../Core/Inc/types.h:
-../Core/Inc/main.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/timer_us/timer_us.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/GUI.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/FONT.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/equipments/pumps.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/equipments/temperature_control.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/ds18b20_lib/DS18B20.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/test.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/ESP/esp.h:
-C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h:
