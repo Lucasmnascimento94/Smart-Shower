@@ -25,3 +25,7 @@ The Smart-Shower aims to provide a more efficient, personalized, and intelligent
 -> Smart Safety Alarms and Automation: Extend system logic to trigger alarms and automated valve actions based on detected anomalies in temperature or water quality.
 
 The first version was made using an ATMEGA 168A, coded in assembly and all the assembled componnets were placed with loose wires in some protoboards. 
+
+
+# Note
+-> Because this application utilizes threads, I started to move away from the HAL functions. At first, when I started migrating from one thread to another multithreaded environment, I started adapting my working functions within certain threads. However, it was later on determined that the HAL function are not thread safe, and the programming was breaking randomly when trying to run some HAL functions. To solve this issue, I started to manipulate the register in a low level manner. Trying to avoid reinventing the wheel, I started reading the STM documentation and controlling the registers using the variable names in the RM and the macros that are provided in the STM header files. With this approach it was possible to create mutaxes and make sure that no race condition is preventing my code from running. 
