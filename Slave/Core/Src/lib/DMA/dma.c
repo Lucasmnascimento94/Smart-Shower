@@ -6,29 +6,54 @@
  */
 #include "dma.h"
 
-// USART1 - DMA2 - RX->STREAM 5 - TX->STREAM 7
+/*#######################################################################################################
+# 	 	 	 	 	 	 	 	 	 	   DMA MEMORYH MAP                                              #
+#########################################################################################################
+*/
+
+// USART1 - DMA2 - RX->STREAM 5-channel4 - TX->STREAM-channel4
 // USART2 - DMA1 - TX->STREAM 6
 
-#define DMA1_ADD = (uint32_t)0X40026000 // BASE ADDRESS
-#define HIFCR_ADD = (uint32_t)(DMA1_ADD + 0x0C)
-#define DMA_S7CR = (uint32_t)(DMA1_ADD + 0X00B8)
-#define DMA_S7NDTR = (uint32_t)(DMA1_ADD + 0X00BC)
-#define DMA_S7PAR = (uint32_t)(DMA1_ADD + 0X00C0)
-#define DMA_S7M0AR = (uint32_t)(DMA1_ADD + 0X00C4)
-#define DMA_S7M1AR = (uint32_t)(DMA1_ADD + 0X00C8)
-#define DMA_S7FCR = (uint32_t)(DMA1_ADD + 0X00CC)
+/*#######################################################################################################
+# 	 	 	 	 	 	 	 	 	 	 USART MEMORYH MAP                                              #
+#########################################################################################################
+*/
+#define USART1_ADD (uint32_t)0x40011000 // BASE ADDRESS
+#define USART2_ADD (uint32_t)0x40004400 // BASE ADDRESS
 
+#define USART1_SR(uint32_t)(USART1_ADD + 0x00000000)
+#define USART1_DR(uint32_t)()
 
 // UART
-HAL_StatusTypeDef SET_UP_DMAR(ESP_DATA_CONTROL *esp){
+
+HAL_StatusTypeDef RESET_DMAR(ESP_DATA_CONTROL *esp){
+	/*#######################################################################################################
+	# 	 	 	 	 	 	 	 	 	 	    DMA CONFIGURATION                                           #
+	#########################################################################################################
+	*/
+
 	  // DMA stream disable if running
 	CLEAR_BIT(esp->huart->hdmarx->Instance->CR, DMA_SxCR_EN);
+	uint32_t TIME_OUT = 10;
+
+	// Wait until Stream is ready to be configured.
+	while(READ_BIT(esp->huart->hdmarx->Instance->CR, DMA_SxCR_EN)){
+		if(TIME_OUT-- == 0){
+			return HAL_TIMEOUT;
+		}
+
+		osDelay(1);
+	}
+
 	/*#######################################################################################################
 	# 	 	 	 	 	 	 	 	 	 	    CLEAR FLAGS                                                 #
 	#########################################################################################################
 	*/
 	uint32_t DMA_CLEAR_MASK = 0X00 | DMA_HIFCR_CTCIF5 | DMA_HIFCR_CHTIF5 | DMA_HIFCR_CTEIF5 | DMA_HIFCR_CDMEIF5 | DMA_HIFCR_CFEIF5;
-	WRITE_REG(HIFCR_ADD, DMA_CLEAR_MASK);
+	MODIFY_REG(DMA2->HIFCR, 0,DMA_CLEAR_MASK);
+
+	DMA_CLEAR_MASK = 0X00;
+	MODIFY_REG(DMA2->LIFCR, 0, DMA_CLEAR_MASK);
 
 
 	/*#######################################################################################################
@@ -40,50 +65,15 @@ HAL_StatusTypeDef SET_UP_DMAR(ESP_DATA_CONTROL *esp){
 	DMA_CR |= 0x01 << 10; // Memory increment mode
 	DMA_CR |= 0x00 << 6; // Data transfer direction (Peripheral-To-Memory)
 	DMA_CR |= 0x01 << 4; // Transfer complete interrupt (Enabled)
-	DMA_CR |= (uint32_t)5 << 25; // Channel 5
+	DMA_CR |= (uint32_t)4 << 25; // Channel 4
 	DMA_CR &= ~(0x01);
-	WRITE_REG(DMA_S5CR, DMA_CR);
-
-	/*#######################################################################################################
-	# 	 	 	 	 	 	 	 	 	   SET DMA MEMORY LOCATIONS                                         #
-	#########################################################################################################
-	*/
-	WRITE_REG(DMA_S5PAR, (uint32_t)&(esp->huart->Instance->DR)); // Set peripheral address (USARTx->RDR)
-	WRITE_REG(DMA_S5M0AR, (uint32_t)esp->esp_uart_buffer_rx); // Set memory address
-	WRITE_REG(DMA_S5NDTR, sizeof(esp->esp_uart_buffer_rx));
-
-	/*#######################################################################################################
-	# 	 	 	 	 	 	 	 	 	   SET DMA UART CONFIG                                              #
-	#########################################################################################################
-	*/
+	WRITE_REG(esp->huart->hdmarx->Instance->CR, DMA_CR);
 
 
 
-	  // Enable DMA request from UART
-	  SET_BIT(esp->huart->Instance->CR3, USART_CR3_DMAR);
-
-	  // Enable DMA stream
-	  SET_BIT(esp->huart->hdmarx->Instance->CR, DMA_SxCR_EN);
-
-	  // Update HAL internals
-	  esp->huart->pRxBuffPtr = esp->esp_uart_buffer_rx;
-	  esp->huart->RxXferSize = sizeof(esp->esp_uart_buffer_rx);
-	  esp->huart->ReceptionType = HAL_UART_RECEPTION_TOIDLE;
-	  esp->huart->RxEventType = HAL_UART_RXEVENT_TC;
-
-	  // Enable IDLE interrupt
-	  SET_BIT(esp->huart->Instance->CR1, USART_CR1_IDLEIE);
-
-	  // Enable UART
-	  SET_BIT(esp->huart->Instance->CR1, USART_CR1_IDLEIE);
-	  SET_BIT(esp->huart->Instance->CR1, USART_CR1_UE);
-	  //HAL_UART_Transmit(&huart2, (uint8_t *)"SET UP DMAR\n",20, 100);
-	  osDelay(10);
-	  return HAL_OK;
-}
 
 
-HAL_StatusTypeDef RESET_DMAR(ESP_DATA_CONTROL *esp){
+
 
 	/*#######################################################################################################
 	# 	 	 	 	 	 	 	 	 	 	    UART CONFIGURATION                                          #
@@ -152,6 +142,51 @@ void UART_DMA_MFLAG(uint32_t flag, ESP_DATA_CONTROL *esp){
 	  }
 	  osDelay(10);
 }
+
+
+HAL_StatusTypeDef SET_UP_DMAR(ESP_DATA_CONTROL *esp){
+
+
+
+	/*#######################################################################################################
+	# 	 	 	 	 	 	 	 	 	   SET DMA MEMORY LOCATIONS                                         #
+	#########################################################################################################
+	*/
+	WRITE_REG(esp->huart->hdmarx->Instance->PAR, (uint32_t)&(esp->huart->Instance->DR)); // Set peripheral address (USARTx->RDR)
+	WRITE_REG(esp->huart->hdmarx->Instance->M0AR, (uint32_t)esp->esp_uart_buffer_rx); // Set memory address
+	WRITE_REG(esp->huart->hdmarx->Instance->NDTR, sizeof(esp->esp_uart_buffer_rx));
+
+	/*#######################################################################################################
+	# 	 	 	 	 	 	 	                UART CR1 CONFIG                                             #
+	#########################################################################################################
+	*/
+	uint32_t CR1 = 0x00;
+	CR1 |= ( USART_CR1_UE | USART_CR1_IDLEIE | USART_CR1_RE);
+	MODIFY_REG(esp->huart->Instance->CR1, 0, CR1);
+
+	/*#######################################################################################################
+	# 	 	 	 	 	 	 	                UART CR2 CONFIG                                             #
+	#########################################################################################################
+	*/
+	uint32_t CR2 = 0x00;
+	CR2 |= ( USART_CR2_CLKEN);
+	MODIFY_REG(esp->huart->Instance->CR2, 0, CR2);
+
+	/*#######################################################################################################
+	# 	 	 	 	 	 	 	                UART CR3 CONFIG                                             #
+	#########################################################################################################
+	*/
+	uint32_t CR3 = 0x00;
+	CR3 |= ( USART_CR3_DMAR );
+	MODIFY_REG(esp->huart->Instance->CR3, 0, CR3);
+
+	//HAL_UART_Transmit(&huart2, (uint8_t *)"SET UP DMAR\n",20, 100);
+	SET_BIT(esp->huart->hdmarx->Instance->CR, DMA_SxCR_EN);
+	osDelay(10);
+	return HAL_OK;
+}
+
+
 
 
 HAL_StatusTypeDef SET_UP_DMAT(ESP_DATA_CONTROL *esp){

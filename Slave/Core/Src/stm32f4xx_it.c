@@ -259,6 +259,8 @@ void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
   /* USER CODE END USART1_IRQn 0 */
+
+  if(esp.huart->Instance->)
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
 
