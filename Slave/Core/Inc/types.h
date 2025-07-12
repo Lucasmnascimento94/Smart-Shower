@@ -10,6 +10,7 @@
 #include "stdint.h"
 #include "stm32f4xx_hal.h"
 #include "main.h"
+#include "cmsis_os.h"
 
 
 /*#######################################################################################################
@@ -47,11 +48,12 @@ extern uint8_t esp_uart_buffer_tx[512];
 
 extern uint32_t FLAG_UART;
 
-#define ESP_MSG_READY 0x01
+#define ESP_RTS 0x01
 #define ESP_MSG_COMPLETE 0x02
 #define ESP_MSG_ACK 0x04
 #define ESP_MSG_ACK_SENT 0x08
 #define ESP_MSG_ACK_COMPLETE 0x10
+#define ESP_UART_RELEASE_MUTEX 0x20
 
 typedef struct{
 	uint8_t esp_uart_buffer_tx[100];
@@ -66,6 +68,10 @@ typedef struct{
 }ESP_DATA_CONTROL;
 
 
+extern osMutexId_t HUART1Handle;
+extern osMutexId_t HUART2Handle;
+extern osEventFlagsId_t UART_RTSHandle;
+extern osEventFlagsId_t UART_CTSHandle;
 /*#######################################################################################################
 #########################################################################################################
 # 	 	 	 	 	 	 	 	 	 	                                                                #

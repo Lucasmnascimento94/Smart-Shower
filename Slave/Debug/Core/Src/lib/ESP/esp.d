@@ -41,7 +41,8 @@ Core/Src/lib/ESP/esp.o: ../Core/Src/lib/ESP/esp.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h
+ C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h \
+ C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h
 ../Core/Src/lib/ESP/esp.h:
 ../Core/Inc/types.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -86,3 +87,4 @@ Core/Src/lib/ESP/esp.o: ../Core/Src/lib/ESP/esp.c \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h:
+C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h:

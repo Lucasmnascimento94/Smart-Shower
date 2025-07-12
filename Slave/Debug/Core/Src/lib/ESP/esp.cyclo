@@ -1,4 +1,4 @@
-../Core/Src/lib/ESP/esp.c:3:6:ESP_HAND_SHAKE_HANDLE	5
-../Core/Src/lib/ESP/esp.c:37:6:ESP_START_PROTOCOL	2
-../Core/Src/lib/ESP/esp.c:47:6:ESP_UART_ACK	2
-../Core/Src/lib/ESP/esp.c:63:6:FLAG_BINARY_PRINT	3
+../Core/Src/lib/ESP/esp.c:5:6:ESP_HAND_SHAKE_HANDLE	5
+../Core/Src/lib/ESP/esp.c:32:6:ESP_START_PROTOCOL	4
+../Core/Src/lib/ESP/esp.c:58:6:ESP_UART_ACK	4
+../Core/Src/lib/ESP/esp.c:78:6:FLAG_BINARY_PRINT	3

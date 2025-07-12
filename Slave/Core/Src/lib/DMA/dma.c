@@ -90,7 +90,7 @@ HAL_StatusTypeDef RESET_DMAR(ESP_DATA_CONTROL *esp){
 	#########################################################################################################
 	*/
 
-	uint32_t DMA_CR = 0x00;
+	DMA_CR = 0x00;
 	DMA_CR |= 0x02 << 16; // Priority Level (high)
 	DMA_CR |= 0x01 << 10; // Memory increment mode
 	DMA_CR |= 0x00 << 6; // Data transfer direction (Peripheral-To-Memory)

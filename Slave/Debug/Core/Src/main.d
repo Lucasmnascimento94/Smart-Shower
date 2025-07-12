@@ -51,6 +51,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/ds18b20_lib/DS18B20.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/test.h \
+ C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/ESP/esp.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h
 ../Core/Inc/main.h:
@@ -107,5 +108,6 @@ C:/Smart-Shower/smartValve/Core/Src/lib/equipments/temperature_control.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/ds18b20_lib/DS18B20.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/test.h:
+C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/ESP/esp.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/DMA/dma.h:

@@ -35,6 +35,7 @@
 #include "FONT.h"
 #include "temperature_control.h"
 #include "stm32f4xx_hal_flash.h"
+#include "serial_printing.h"
 #include "esp.h"
 #include "dma.h"
 /* USER CODE END Includes */
@@ -116,6 +117,41 @@ const osMutexAttr_t uartMutex_attributes = {
 osMutexId_t ds18b20MutexHandle;
 const osMutexAttr_t ds18b20Mutex_attributes = {
   .name = "ds18b20Mutex"
+};
+/* Definitions for HUART1 */
+osMutexId_t HUART1Handle;
+const osMutexAttr_t HUART1_attributes = {
+  .name = "HUART1"
+};
+/* Definitions for HUART2 */
+osMutexId_t HUART2Handle;
+const osMutexAttr_t HUART2_attributes = {
+  .name = "HUART2"
+};
+/* Definitions for UART_RTS */
+osEventFlagsId_t UART_RTSHandle;
+const osEventFlagsAttr_t UART_RTS_attributes = {
+  .name = "UART_RTS"
+};
+/* Definitions for UART_CTS */
+osEventFlagsId_t UART_CTSHandle;
+const osEventFlagsAttr_t UART_CTS_attributes = {
+  .name = "UART_CTS"
+};
+/* Definitions for SCREEM_TOUCH */
+osEventFlagsId_t SCREEM_TOUCHHandle;
+const osEventFlagsAttr_t SCREEM_TOUCH_attributes = {
+  .name = "SCREEM_TOUCH"
+};
+/* Definitions for ESP_RECEIVE */
+osEventFlagsId_t ESP_RECEIVEHandle;
+const osEventFlagsAttr_t ESP_RECEIVE_attributes = {
+  .name = "ESP_RECEIVE"
+};
+/* Definitions for ESP_SEND */
+osEventFlagsId_t ESP_SENDHandle;
+const osEventFlagsAttr_t ESP_SEND_attributes = {
+  .name = "ESP_SEND"
 };
 /* USER CODE BEGIN PV */
 uint8_t buffer[1];
@@ -328,6 +364,12 @@ int main(void)
   /* creation of ds18b20Mutex */
   ds18b20MutexHandle = osMutexNew(&ds18b20Mutex_attributes);
 
+  /* creation of HUART1 */
+  HUART1Handle = osMutexNew(&HUART1_attributes);
+
+  /* creation of HUART2 */
+  HUART2Handle = osMutexNew(&HUART2_attributes);
+
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
@@ -361,6 +403,21 @@ int main(void)
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
+  /* creation of UART_RTS */
+  UART_RTSHandle = osEventFlagsNew(&UART_RTS_attributes);
+
+  /* creation of UART_CTS */
+  UART_CTSHandle = osEventFlagsNew(&UART_CTS_attributes);
+
+  /* creation of SCREEM_TOUCH */
+  SCREEM_TOUCHHandle = osEventFlagsNew(&SCREEM_TOUCH_attributes);
+
+  /* creation of ESP_RECEIVE */
+  ESP_RECEIVEHandle = osEventFlagsNew(&ESP_RECEIVE_attributes);
+
+  /* creation of ESP_SEND */
+  ESP_SENDHandle = osEventFlagsNew(&ESP_SEND_attributes);
+
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
@@ -373,7 +430,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   char terminalBuffer[100]; char hotBuffer[100];
-  char updateMsg[200];
+  char updateMsg[300];
 
 	while(1){
     /* USER CODE END WHILE */
@@ -715,6 +772,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE BEGIN USART1_Init 1 */
 
+
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
@@ -729,7 +787,8 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-
+  esp.rx_status = HAL_OK;
+  esp.tx_status = HAL_OK;
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -901,28 +960,29 @@ static void MX_GPIO_Init(void)
 void getFloatString(char *buffer, float number){
 	int intNumber = (int)floor(number);
 	int floatNumber = (int)((number - (float)intNumber)*10000);
-	sprintf(buffer, "%d,%d", intNumber, floatNumber);
+	sprintf(buffer, "%d.%d°C\n", intNumber, floatNumber);
 }
 
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
     if (huart->Instance == USART1) {
-        if (Size < sizeof(esp.esp_uart_buffer_rx)) {
-        	esp.esp_uart_buffer_rx[Size] = '\0';
-        }
-
         SET_CTS;      // Clear CTS
-
         FLAG_UART |= ESP_MSG_COMPLETE;
-
-        // Stop DMA manually if needed (prevents re-trigger)
-        HAL_UART_DMAStop(huart);  // Prevent retrigger
+        FLAG_UART |= ESP_UART_RELEASE_MUTEX;
+        //BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        //print_OS_Status(&huart2, osMutexRelease(HUART1Handle));
+       // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
     // Your custom code here
 	if(huart->Instance == USART1){
+		FLAG_UART |= ESP_MSG_ACK_SENT;
+		//BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+		//osSemaphoreRelease(HUART1Handle);
+		//portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	}
 }
 
@@ -943,12 +1003,20 @@ void mainFunction(void *argument)
 {
   /* USER CODE BEGIN 5 */
 	osDelay(200);
-	//char msg[100] = "MAIN FUNCTION THREAD\n";
+	char msg[100] = "MAIN FUNCTION THREAD\n";
+	TickType_t MUTEX_WAIT = 1000;
+	osStatus status;
   /* Infinite loop */
   for(;;)
   {
-	  //HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
-    osDelay(500);
+	//HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+
+	status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
+	if(status == osOK){
+		HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+		osMutexRelease(HUART2Handle);
+	}
+    osDelay(100);
   }
   /* USER CODE END 5 */
 }
@@ -964,11 +1032,17 @@ void valveFunction(void *argument)
 {
   /* USER CODE BEGIN valveFunction */
 	osDelay(200);
-	//char msg[100] = "VALVE FUNCTION THREAD\n";
+	char msg[100] = "VALVE FUNCTION THREAD\n";
+	TickType_t MUTEX_WAIT = 1000;
+	osStatus status;
   /* Infinite loop */
   for(;;)
   {
-	  //HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+	status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
+	if(status == osOK){
+		HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+		osMutexRelease(HUART2Handle);
+	}
     osDelay(500);
   }
   /* USER CODE END valveFunction */
@@ -984,62 +1058,53 @@ void valveFunction(void *argument)
 void uartFunction(void *argument)
 {
   /* USER CODE BEGIN uartFunction */
-  FLAG_UART = 0x00;
-  SET_CTS;
-  SET_RTS;
+	TickType_t MUTEX_WAIT = 1000;
+	osStatus status;
+	char msg[100] = "UART THREAD\n";
+	  osDelay(1000);
+	  MX_USART1_UART_Init();
+	  FLAG_UART = 0x00;
+	  SET_CTS;
+	  SET_RTS;
 
-  GPIOA->BSRR = (1U << (16));
-  HAL_Delay(1000);
-  GPIOA->BSRR = (1U << (0));
-  GPIOB->BSRR = (1U << 8); // Enable ESP
-  T_CS_SET;
-  osDelay(2000);
-  HAL_UART_Receive_IT(&huart1, rxBuffer, 1);
+	  GPIOA->BSRR = (1U << (16));
+	  HAL_Delay(1000);
+	  GPIOA->BSRR = (1U << (0));
+	  GPIOB->BSRR = (1U << 8); // Enable ESP
+	  T_CS_SET;
+	  osDelay(1000);
 
-  HAL_StatusTypeDef RX_STATUS, TX_STATUS;
-  RX_STATUS = SET_UP_DMAR(&esp);
-  TX_STATUS = SET_UP_DMAT(&esp);
-  TX_STATUS = HAL_OK;
-  //SET_UP_DMAT();
-  //memset(esp_uart_buffer, 0, sizeof(esp_uart_buffer));
+	  if(esp.rx_status == HAL_OK && esp.tx_status == HAL_OK){
+		  for(;;)
+			{
+			  if((FLAG_UART & ESP_MSG_ACK) && !(GPIOA->IDR & GPIO_IDR_ID7)){
+				  ESP_UART_ACK(&esp);
 
-  // HAL_StatusTypeDef HAL_UART_Transmit_DMA(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size)
-  /* Infinite loop */
+			  }
+			  else if(!(GPIOA->IDR & GPIO_IDR_ID6) && !(FLAG_UART & ESP_RTS)){
+				  ESP_START_PROTOCOL(&esp);
 
-  while((RX_STATUS != HAL_OK) || (TX_STATUS != HAL_OK)){
-	//  HAL_UART_Transmit(&huart2, (uint8_t *)"RX FEED BACK: ", 15, 100);
-	  UART_DMA_MFLAG(RX_STATUS, &esp);
-	  osDelay(10);
-	 // HAL_UART_Transmit(&huart2, (uint8_t *)"TX FEED BACK: ", 15, 100);
-	  UART_DMA_MFLAG(TX_STATUS, &esp);
+			  }
+			  //UART_DMA_MFLAG(RX_STATUS, &esp);
+			  ESP_HAND_SHAKE_HANDLE(&esp);
+			  //HAL_UART_Transmit(&huart2, (uint8_t *) "UART THREAD\n", 15, 100);
+			 // HAL_UART_Transmit(&huart2, esp.esp_uart_buffer_rx, strlen((char *)esp_uart_buffer), 100);
+			  FLAG_BINARY_PRINT(&huart2, FLAG_UART);
 
-	  snprintf((char *)esp.esp_buffer, sizeof(esp.esp_buffer), "UART BLOCKED\n");
-	  SEND_DMA(&esp);
-	  osDelay(3000);
-  }
-  if((RX_STATUS == HAL_OK) && (TX_STATUS == HAL_OK)){
-	  for(;;)
-	    {
-		  if((FLAG_UART & ESP_MSG_ACK) && !(GPIOA->IDR & GPIO_IDR_ID7)){
-			  ESP_UART_ACK(&esp);
+			 if(FLAG_UART != ESP_UART_RELEASE_MUTEX){
+				 osMutexRelease(HUART1Handle);
+				 //print_OS_Status(&huart2, osMutexRelease(HUART1Handle));
+				 FLAG_UART &= ~(ESP_UART_RELEASE_MUTEX);
+			 }
+			 osDelay(100);
+		   }
 
-		  }
-		  else if(!(GPIOA->IDR & GPIO_IDR_ID6) && !(FLAG_UART & ESP_MSG_READY)){
-			  ESP_START_PROTOCOL(&esp);
-
-	  	  }
-	  	  UART_DMA_MFLAG(RX_STATUS, &esp);
-	  	  ESP_HAND_SHAKE_HANDLE(&esp);
-
-	  	 // HAL_UART_Transmit(&huart2, esp_uart_buffer, strlen((char *)esp_uart_buffer), 100);
-          FLAG_BINARY_PRINT(&huart2, FLAG_UART);
-
-	     osDelay(1000);
-	   }
-
-	  snprintf((char *)esp.esp_buffer, sizeof(esp.esp_buffer), "UART THREAD\n");
-	  SEND_DMA(&esp);
-  }
+			status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
+			if(status == osOK){
+				HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+				osMutexRelease(HUART2Handle);
+			}
+	  }
 
   /* USER CODE END uartFunction */
 }
@@ -1055,11 +1120,32 @@ void ds18b20Function(void *argument)
 {
   /* USER CODE BEGIN ds18b20Function */
 	osDelay(200);
+	char temperature[100];
+	memset(temperature, 0, sizeof(temperature));
+	TickType_t MUTEX_WAIT = 1000;
+	osStatus status;
   //char msg[100] = "DS18B20 FUNCTION THREAD\n";
   /* Infinite loop */
   for(;;)
   {
-    //HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+	terminal_temp = ds18b20_get_temperature(&ds18b20_terminal, false, &huart2);
+	hot_temp = ds18b20_get_temperature(&ds18b20_hot, false, &huart2);
+
+	ds18b20_terminal.delta = terminal_temp - ds18b20_terminal.temperature;
+	ds18b20_hot.delta = hot_temp - ds18b20_hot.temperature;
+
+	ds18b20_terminal.temperature = terminal_temp;
+	ds18b20_hot.temperature = hot_temp;
+
+	status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
+	if(status == osOK){
+		getFloatString(temperature, ds18b20_hot.temperature);
+		HAL_UART_Transmit(&huart2, (uint8_t *) temperature, strlen(temperature), 100);
+	    osDelay(1);
+		getFloatString(temperature, ds18b20_terminal.temperature);
+		HAL_UART_Transmit(&huart2, (uint8_t *) temperature, strlen(temperature), 100);
+		osMutexRelease(HUART2Handle);
+	}
     osDelay(500);
   }
   /* USER CODE END ds18b20Function */
