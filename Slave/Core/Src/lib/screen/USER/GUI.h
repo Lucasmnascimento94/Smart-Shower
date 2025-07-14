@@ -107,6 +107,7 @@ void GUI_ADD_CANVAS(View_t  *view, struct CanvasConf_t *settings);
 void GUI_DELETE_CANVAS(struct _Page  *page, char *ID);
 void GUI_ADD_PAGE(Screen_t *screen, char *ID);
 void GUI_DELETE_PAGE(Screen_t *screen, char *ID);
+void GUI_SET_PAGE1(Page_t *page);
 
 //void SCAN_HANDLE(SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button,
 //					Pressed *pressed, uint8_t *act, uint8_t *flag, Page *page);

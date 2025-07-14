@@ -777,47 +777,6 @@ void LCD_typeDebug(char *c){
 	Show_Str(20, 30, BLACK, WHITE, c, 12, 1);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void GUI_DRAW_PAGE(Page_t *page){
-	Canvas_t *current_canvas;
-
-	for(current_canvas = page->view->home_canvas; current_canvas != NULL; current_canvas = current_canvas->next_canvas){
-
-	}
-}
-
-void GUI_DRAW_CANVAS(Canvas_t *canvas){
-	struct CanvasConf_t *settings = canvas->settings;
-
-	if(settings->text_only){
-		/*ignore some parameters*/
-	}
-	else{
-		LCD_Fill(
-				settings->canvasStart_x,
-				settings->canvasStart_y,
-				settings->canvasWidth,
-				settings->canvasHeight,
-				settings->canvasBackgroundColor);
-
-	}
-
-}
-
 void GUI_INIT(Screen_t *screen){
 	screen->count = 0;
 
@@ -826,17 +785,16 @@ void GUI_INIT(Screen_t *screen){
 	if(settings == NULL){
 		SerialPrint("FAILED TO ALLOCATE MEMORY");
 	}
-	settings->ID = "home_canvas";
+	settings->Canvas_ID = "home_canvas";
 	settings->canvasBackgroundColor = BLACK;
-	settings->canvasFrontColot = WHITE;
 	settings->canvasHeight = lcddev.height;
 	settings->canvasWidth = lcddev.width;
 	settings->canvasStart_x = 0;
 	settings->canvasStart_y = 0;
 	settings->effects = false;
-	settings->text_only = false;
 	GUI_ADD_CANVAS(screen->home_page->view, settings);
-	GUI_DRAW_CANVAS(screen->home_page->view->home_canvas);
+	GUI_SET_PAGE1(screen->home_page);
+	//GUI_DRAW_CANVAS(screen->home_page->view->home_canvas);
 }
 
 
@@ -873,7 +831,7 @@ void GUI_ADD_PAGE(Screen_t *screen, char *ID){
 		SerialPrint("FAILED TO ALLOCATE MEMORY VIEW\n");
 	}
 
-	page->ID = ID;
+	page->Page_ID = ID;
 	page->view = view;
 	page->next_page = NULL;
 
@@ -894,6 +852,33 @@ void GUI_DELETE_PAGE(Screen_t *screen, char *ID){
 }
 
 
+void GUI_DRAW_PAGE(Page_t *page){
+	Canvas_t *current_canvas;
+
+	for(current_canvas = page->view->home_canvas; current_canvas != NULL; current_canvas = current_canvas->next_canvas){
+	}
+}
+
+void GUI_DRAW_CANVAS(Canvas_t *canvas){
+	struct CanvasConf_t *settings = canvas->settings;
+
+}
+
+void GUI_SET_PAGE1(Page_t *page){
+	struct CanvasConf_t *settings = osMemoryPoolAlloc(SETTINGS_POOLHandle, osWaitForever);
+	if(settings == NULL){
+		SerialPrint("FAILED TO ALLOCATE MEMORY");
+	}
+	char *text = "StartTech Corporation";
+	settings->Canvas_ID = "header";
+	settings->canvasBackgroundColor = BLACK;
+	settings->canvasHeight = 10;
+	settings->canvasWidth = 5*(sizeof(text));
+	settings->canvasStart_x = 50;
+	settings->canvasStart_y = 5;
+	settings->effects = false;
+	GUI_ADD_CANVAS(page->view, settings);
+}
 
 
 

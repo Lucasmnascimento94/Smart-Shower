@@ -208,40 +208,62 @@ typedef struct{
 #define SCAN_PAD 0x01
 #define SCREEN_READY 0x02
 
+#define screenHeight 320
+#define screenWidth 240
+#define nPages 2
+#define nCanvas 35
+
+#define DEFAULT 0
 
 
-typedef struct {
-	char *effect;
-}Effect_t;
-
-
-/*Display the canvas*/
-typedef struct _canvas{
-	/*Pointing to the next canvas in the page*/
-	struct _canvas *next_canvas;
-	struct CanvasConf_t *settings;
-}Canvas_t;
 
 typedef struct{
-	Canvas_t *home_canvas;
-	Canvas_t *last_canvas;
-	int count;
-}View_t;
-
-typedef struct _Page{
-	struct _Page *next_page;
-	View_t *view;
-	char *ID;
-}Page_t;
-
-typedef struct{
-	Page_t *home_page;
-	Page_t *last_page;
+	struct _Page *home_page;
+	struct _Page *last_page;
 	int count;
 }Screen_t;
 
-struct CanvasConf_t{
-	char *ID;
+typedef struct _Page{
+	struct _Page *next_page;
+	struct _view *view;
+	char *Page_ID;
+	int index;
+}Page_t;
+
+typedef struct _view{
+	struct _canvas *home_canvas;
+	struct _canvas *last_canvas;
+	int count;
+}View_t;
+
+/*Display the canvas*/
+typedef struct _canvas{
+	/*Pointers to be filled by linking function*/
+	struct _canvas *next_canvas;
+	struct _canvas *parent_canvas;
+	struct _canvas *child_canvas;
+	struct _text *text;
+	struct CanvasConf_t *settings;
+	int index;
+}Canvas_t;
+
+/*Display Text*/
+typedef struct _text{
+	/*Pointers to be filled by linking function*/
+	struct _textConf_t *next_text;
+	struct _canvas *parent_canvas;
+	struct TextConf_t *settings;
+	bool update;
+	int index;
+}Text_t;
+
+typedef struct CanvasConf_t{
+	/*IDs Relation for linking function*/
+	char *Canvas_ID;
+	char *Parent_ID;
+	char *Page_ID;
+	int index;
+
 	/*Canvas Size*/
 	uint32_t canvasWidth;
 	uint32_t canvasHeight;
@@ -250,23 +272,79 @@ struct CanvasConf_t{
 	uint32_t canvasStart_x;
 	uint32_t canvasStart_y;
 
+	/*Position*/
+	uint16_t offset_top;
+	uint16_t offset_bottom;
+	uint16_t offset_left;
+	uint16_t offset_right;
+	bool offset_center_x;
+	bool offset_center_y;
+
 	/*Canvas Color*/
 	uint16_t canvasBackgroundColor;
-	uint16_t canvasFrontColot;
 
 	/*Actions*/
 	bool effects;
-	bool text_only;
 	void *effect_ptr;
+}_CanvasConf_t;
+
+typedef struct _textConf_t{
+	/*IDs Relation for linking function*/
+	char *Canvas_ID;
+	char *Parent_ID;
+	char *Page_ID;
+	int index;
+
+
+	/*Position*/
+	uint16_t offset_top;
+	uint16_t offset_bottom;
+	uint16_t offset_left;
+	uint16_t offset_right;
+	bool offset_center_x;
+	bool offset_center_y;
+
+
+	/*Data Display*/
+	bool data_center;
+	bool data_top;
+	bool data_bottom;
+	bool data_left;
+	bool data_right;
+
+	/*Text Parameters*/
+	uint16_t text_color;
+	uint16_t font_size;
+
+	/*Actions*/
+	bool effects;
+	void *effect_ptr;
+}TextConf_t;
+
+typedef struct {
+	char *effect;
+}Effect_t;
+
+struct _pageIndex {
+	char** Page_IDs;
+	int pageCount;
 };
 
 
+
+
+
+extern uint8_t cmdArray[100];
+extern Screen_t screen;
+extern Page_t home_page;
+extern struct _pageIndex pageIndex;
 extern osEventFlagsId_t TOUCH_SCREEN_FLAGHandle;
 extern osMemoryPoolId_t SETTINGS_POOLHandle;
 extern osMemoryPoolId_t CANVAS_POOLHandle;
 extern osMemoryPoolId_t PAGE_POOLHandle;
 extern osMemoryPoolId_t VIEW_POOLHandle;
 
+extern osMessageQueueId_t LCD_BUFFER_TRANSMITHandle;
 
 
 
@@ -314,7 +392,26 @@ typedef struct{
 
 /*#######################################################################################################
 #########################################################################################################
-# 	 	 	 	 	 	 	 	 	 	 					                                            #
+# 	 	 	 	 	 	 	 	 	 	 		General				                                    #
+#########################################################################################################
+#########################################################################################################
+*/
+
+
+typedef struct _Node{
+	struct _Node *next;
+	uint16_t val;
+}Node;
+
+typedef struct{
+	Node *head;
+	Node *tail;
+	int count;
+}List;
+
+/*#######################################################################################################
+#########################################################################################################
+# 	 	 	 	 	 	 	 	 	 	 		----		                                            #
 #########################################################################################################
 #########################################################################################################
 */
@@ -339,3 +436,10 @@ extern Button button;
 extern Valve valve;
 extern osMessageQueueId_t SerialBufferHandle;
 #endif
+
+
+
+
+
+
+

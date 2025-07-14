@@ -17,6 +17,7 @@
 "./Core/Src/lib/screen/LCD/lcd.o"
 "./Core/Src/lib/screen/LED/LED.o"
 "./Core/Src/lib/screen/USER/GUI.o"
+"./Core/Src/lib/screen/USER/home_page_layout.o"
 "./Core/Src/lib/screen/USER/test.o"
 "./Core/Src/lib/screen/paint.o"
 "./Core/Src/lib/screen/screen.o"

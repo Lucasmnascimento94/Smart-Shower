@@ -6,14 +6,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Core/Src/lib/screen/USER/GUI.c \
+../Core/Src/lib/screen/USER/home_page_layout.c \
 ../Core/Src/lib/screen/USER/test.c 
 
 OBJS += \
 ./Core/Src/lib/screen/USER/GUI.o \
+./Core/Src/lib/screen/USER/home_page_layout.o \
 ./Core/Src/lib/screen/USER/test.o 
 
 C_DEPS += \
 ./Core/Src/lib/screen/USER/GUI.d \
+./Core/Src/lib/screen/USER/home_page_layout.d \
 ./Core/Src/lib/screen/USER/test.d 
 
 
@@ -24,7 +27,7 @@ Core/Src/lib/screen/USER/%.o Core/Src/lib/screen/USER/%.su Core/Src/lib/screen/U
 clean: clean-Core-2f-Src-2f-lib-2f-screen-2f-USER
 
 clean-Core-2f-Src-2f-lib-2f-screen-2f-USER:
-	-$(RM) ./Core/Src/lib/screen/USER/GUI.cyclo ./Core/Src/lib/screen/USER/GUI.d ./Core/Src/lib/screen/USER/GUI.o ./Core/Src/lib/screen/USER/GUI.su ./Core/Src/lib/screen/USER/test.cyclo ./Core/Src/lib/screen/USER/test.d ./Core/Src/lib/screen/USER/test.o ./Core/Src/lib/screen/USER/test.su
+	-$(RM) ./Core/Src/lib/screen/USER/GUI.cyclo ./Core/Src/lib/screen/USER/GUI.d ./Core/Src/lib/screen/USER/GUI.o ./Core/Src/lib/screen/USER/GUI.su ./Core/Src/lib/screen/USER/home_page_layout.cyclo ./Core/Src/lib/screen/USER/home_page_layout.d ./Core/Src/lib/screen/USER/home_page_layout.o ./Core/Src/lib/screen/USER/home_page_layout.su ./Core/Src/lib/screen/USER/test.cyclo ./Core/Src/lib/screen/USER/test.d ./Core/Src/lib/screen/USER/test.o ./Core/Src/lib/screen/USER/test.su
 
 .PHONY: clean-Core-2f-Src-2f-lib-2f-screen-2f-USER
 

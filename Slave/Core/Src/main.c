@@ -58,6 +58,9 @@
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi4;
+DMA_HandleTypeDef hdma_spi2_tx;
+DMA_HandleTypeDef hdma_spi4_rx;
+DMA_HandleTypeDef hdma_spi4_tx;
 
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
@@ -218,6 +221,11 @@ const osMessageQueueAttr_t SerialBuffer_attributes = {
 osMessageQueueId_t DS18B20_BUFFERHandle;
 const osMessageQueueAttr_t DS18B20_BUFFER_attributes = {
   .name = "DS18B20_BUFFER"
+};
+/* Definitions for LCD_BUFFER_TRANSMIT */
+osMessageQueueId_t LCD_BUFFER_TRANSMITHandle;
+const osMessageQueueAttr_t LCD_BUFFER_TRANSMIT_attributes = {
+  .name = "LCD_BUFFER_TRANSMIT"
 };
 /* Definitions for valveMutex */
 osMutexId_t valveMutexHandle;
@@ -537,6 +545,9 @@ int main(void)
 
   /* creation of DS18B20_BUFFER */
   DS18B20_BUFFERHandle = osMessageQueueNew (16, sizeof(uint32_t), &DS18B20_BUFFER_attributes);
+
+  /* creation of LCD_BUFFER_TRANSMIT */
+  LCD_BUFFER_TRANSMITHandle = osMessageQueueNew (100, sizeof(uint32_t), &LCD_BUFFER_TRANSMIT_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -1032,9 +1043,18 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
   /* DMA1_Stream6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+  /* DMA2_Stream1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream1_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
   /* DMA2_Stream5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 6, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
@@ -1580,7 +1600,7 @@ void VALVE_WORKER_RECEIVE(void *argument)
 void ScreenFunction(void *argument)
 {
   /* USER CODE BEGIN ScreenFunction */
-	uint8_t canvas_count = 20;
+	uint8_t canvas_count = 35;
 	uint8_t pages_count = 2;
 	uint8_t views_count = 2;
 
@@ -1606,8 +1626,9 @@ void ScreenFunction(void *argument)
   //LCD_UpdateTemperature(&ds18b20_hot, ds18b20_hot.temperature);
   for(;;)
   {
+	GUI_DRAW_PAGE(screen.home_page);
 
-    SerialPrint("SCREEN FUNCTION THREAD\n");
+    //SerialPrint("SCREEN FUNCTION THREAD\n");
     osDelay(500);
   }
   /* USER CODE END ScreenFunction */
