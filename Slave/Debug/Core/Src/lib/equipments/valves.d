@@ -46,7 +46,8 @@ Core/Src/lib/equipments/valves.o: ../Core/Src/lib/equipments/valves.c \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/FONT.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h
+ C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h \
+ C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h
 ../Core/Src/lib/equipments/valves.h:
 ../Core/Inc/types.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -96,3 +97,4 @@ C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/FONT.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h:
+C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h:

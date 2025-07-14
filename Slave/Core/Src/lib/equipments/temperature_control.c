@@ -109,26 +109,26 @@ void VALVE_CONTROL_RUN(Valve *valve, DS18B20 *sensor, Button *button){
 	}
 }
 
-void PARSE_COMMAND(){
+void PARSE_COMMAND(CMD *cmd){
 	char *token;
 	char *ptr;
-	sprintf(cmd.cmd_all_tmp, cmd.cmd_all);
-	ptr = cmd.cmd_all_tmp;
+	sprintf(cmd->cmd_all_tmp, cmd->cmd_all);
+	ptr = cmd->cmd_all_tmp;
 	while((token  = strsep(&ptr, " ")) != NULL){
-		if(strcmp(token, "Origin:") == 0){memset(cmd.origin, 0, sizeof(cmd.origin));
-			if((token = strsep(&ptr, " ")) != NULL){sprintf(cmd.origin, "%s", token); }}
+		if(strcmp(token, "Origin:") == 0){memset(cmd->origin, 0, sizeof(cmd->origin));
+			if((token = strsep(&ptr, " ")) != NULL){sprintf(cmd->origin, "%s", token); }}
 		else if(strcmp(token, "Protocol:") == 0){
-			if((token = strsep(&ptr, " ")) != NULL){sprintf(cmd.protocol, "%s", token); }}
-		else if (strcmp(token, "Command:") == 0){memset(cmd.command, 0, sizeof(cmd.command));
-			if((token = strsep(&ptr, " ")) != NULL){sprintf(cmd.command, "%s", token); act |= CONTROLLER_COMMAND;}}
-		else if(strcmp(token, "Arg_0:") == 0){memset(cmd.args[0], 0, sizeof(cmd.args[0]));
-			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd.args[0], token);}}
-		else if(strcmp(token, "Arg_1:") == 0){memset(cmd.args[1], 0, sizeof(cmd.args[1]));
-			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd.args[1], token); }}
-		else if(strcmp(token, "Arg_2:") == 0){memset(cmd.args[2], 0, sizeof(cmd.args[2]));
-			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd.args[2], token);}}
-		else if(strcmp(token, "Arg_3:") == 0){memset(cmd.args[3], 0, sizeof(cmd.args[3]));
-			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd.args[3], token);}}
+			if((token = strsep(&ptr, " ")) != NULL){sprintf(cmd->protocol, "%s", token); }}
+		else if (strcmp(token, "Command:") == 0){memset(cmd->command, 0, sizeof(cmd->command));
+			if((token = strsep(&ptr, " ")) != NULL){sprintf(cmd->command, "%s", token); act |= CONTROLLER_COMMAND;}}
+		else if(strcmp(token, "Arg_0:") == 0){memset(cmd->args[0], 0, sizeof(cmd->args[0]));
+			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd->args[0], token);}}
+		else if(strcmp(token, "Arg_1:") == 0){memset(cmd->args[1], 0, sizeof(cmd->args[1]));
+			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd->args[1], token); }}
+		else if(strcmp(token, "Arg_2:") == 0){memset(cmd->args[2], 0, sizeof(cmd->args[2]));
+			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd->args[2], token);}}
+		else if(strcmp(token, "Arg_3:") == 0){memset(cmd->args[3], 0, sizeof(cmd->args[3]));
+			if((token = strsep(&ptr, " ")) != NULL){strcpy(cmd->args[3], token);}}
 	}
 }
 

@@ -169,29 +169,16 @@ void SET_WINDOW(Screen *screen){
 }
 
 
-void scan(SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button, Pressed *pressed,bool print){
+void scan(SPI_HandleTypeDef *spi, Scan *scan_reading){
 	uint8_t a;
-	uint8_t data_X[2];
-	uint8_t data_Y[2];
-	char buffer_X[50];
-	char buffer_Y[50];
-	char buff[10];
-	char temp1[30];
-	char temp2[30];
-	char buffer[50];
+	uint8_t data_X[2] = {0};
+	uint8_t data_Y[2] = {0};
+
 
 	/* X-POSITION*/
 	a = 0x00;
 	a = START_BIT | X_POSITION;
 	//a = START_BIT | X_POSITION | MODE_8BIT;
-	memset(buffer_X, 0, sizeof(buffer_X));
-	memset(buffer_Y, 0, sizeof(buffer_Y));
-	memset(data_X, 0, sizeof(data_X));
-	memset(data_Y, 0, sizeof(data_Y));
-	memset(buffer, 0, sizeof(buffer));
-	memset(buff, 0, sizeof(buff));
-	memset(temp1, 0, sizeof(temp1));
-	memset(temp2, 0, sizeof(temp2));
 
 	T_CS_RESET; // @suppress("Statement has no effect")
 	//T_IRQ_RESET;
@@ -202,7 +189,7 @@ void scan(SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button, Pres
 	T_CS_SET;
 	//T_IRQ_SET;
 
-	HAL_Delay(100);
+	osDelay(10);
 	/* Y-POSITION*/
 	a = 0x01;
 	a = START_BIT | Y_POSITION;
@@ -218,30 +205,8 @@ void scan(SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button, Pres
 
 	uint16_t r_X = data_X[0] << 4 | (data_X[1] >> 3);
 	uint16_t r_Y = data_Y[0] << 4 | (data_Y[1] >> 3);
-	read_col(pressed, &r_X);
-	read_row(pressed, &r_Y);
-
-	get_button(button, pressed);
-	int n = button->value;
-	if(n != -1){
-		if(n > -1){
-			button->valid = true;
-		}
-
-		else{
-			button->valid = true;
-			button->rst = true;
-			if(n == -3){button->set = true;}
-		}
-	}
-
-	if(print && n != -1){
-		sprintf(buffer_X, "X_-> %X | X_ANL -> %d ", pressed->X_, r_X);
-		print_hex_f_array(uart, (uint8_t *)buffer_X, 1000, false, false, false, true, false);
-
-		sprintf(buffer_Y, "Y_ -> %X | Y_ANL -> %d", pressed->Y_, r_Y);
-		print_hex_f_array(uart, (uint8_t *)buffer_Y, 1000, false, false, false, true, false);
-	}
+	scan_reading->x = r_X;
+	scan_reading->y = r_Y;
 }
 
 void read_col(Pressed *pressed, uint16_t *x){
@@ -328,3 +293,76 @@ void get_button(Button *button, Pressed *pressed){
 }
 
 
+
+
+/*
+ void scan(SPI_HandleTypeDef *spi, Scan *scan_reading){
+	uint8_t a;
+	uint8_t data_X[2] = {0};
+	uint8_t data_Y[2] = {0};
+
+
+
+	a = 0x00;
+	a = START_BIT | X_POSITION;
+	//a = START_BIT | X_POSITION | MODE_8BIT;
+	memset(buffer_X, 0, sizeof(buffer_X));
+	memset(buffer_Y, 0, sizeof(buffer_Y));
+	memset(data_X, 0, sizeof(data_X));
+	memset(data_Y, 0, sizeof(data_Y));
+	memset(buffer, 0, sizeof(buffer));
+	memset(buff, 0, sizeof(buff));
+	memset(temp1, 0, sizeof(temp1));
+	memset(temp2, 0, sizeof(temp2));
+
+	T_CS_RESET; // @suppress("Statement has no effect")
+	//T_IRQ_RESET;
+	HAL_SPI_Transmit(&hspi4, &a, 1, 1000); // @suppress("Statement has no effect")
+	//T_IRQ_SET;
+	//T_IRQ_RESET;
+	HAL_SPI_Receive(&hspi4, data_X, 2, 1000);
+	T_CS_SET;
+	//T_IRQ_SET;
+
+	osDelay(100);
+
+	a = 0x01;
+	a = START_BIT | Y_POSITION;
+	//a = START_BIT | Y_POSITION | MODE_8BIT;
+	T_CS_RESET;
+	//T_IRQ_RESET;
+	HAL_SPI_Transmit(&hspi4, &a, 1, 1000);
+	//T_IRQ_SET;
+	//T_IRQ_RESET;
+	HAL_SPI_Receive(&hspi4, data_Y, 2, 1000);
+	T_CS_SET;
+	//T_IRQ_SET;
+
+	uint16_t r_X = data_X[0] << 4 | (data_X[1] >> 3);
+	uint16_t r_Y = data_Y[0] << 4 | (data_Y[1] >> 3);
+	read_col(pressed, &r_X);
+	read_row(pressed, &r_Y);
+
+	get_button(button, pressed);
+	int n = button->value;
+	if(n != -1){
+		if(n > -1){
+			button->valid = true;
+		}
+
+		else{
+			button->valid = true;
+			button->rst = true;
+			if(n == -3){button->set = true;}
+		}
+	}
+
+	if(print && n != -1){
+		sprintf(buffer_X, "X_-> %X | X_ANL -> %d ", pressed->X_, r_X);
+		print_hex_f_array(uart, (uint8_t *)buffer_X, 1000, false, false, false, true, false);
+
+		sprintf(buffer_Y, "Y_ -> %X | Y_ANL -> %d", pressed->Y_, r_Y);
+		print_hex_f_array(uart, (uint8_t *)buffer_Y, 1000, false, false, false, true, false);
+	}
+}
+  */

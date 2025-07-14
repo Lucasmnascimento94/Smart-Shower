@@ -46,46 +46,37 @@ int VALVE_MODE_1_16_CW(void){
 }
 
 int VALVE_CONTROL_CW_STEP(int step, Valve *valve){ // FEEDS COLD WATER
-	TIMER_US_DELAY(1);
 	VALVE_CCW_SET;
-	TIMER_US_DELAY(1);
 	VALVE_RST_SET;
-	TIMER_US_DELAY(1);
 	VALVE_EN_SET;
-	TIMER_US_DELAY(1);
 	VALVE_TQ_SET;
-	TIMER_US_DELAY(1);
 
 	VALVE_CLK_RST;
 	for(uint32_t i=0; i<step; i++){//&& (valve->steps < MAX_STEPS)
 		VALVE_CLK_SET;
-		osDelay(10);
+		osDelay(1);
 		VALVE_CLK_RST;
-		osDelay(10);
+		osDelay(1);
 		valve->steps--;
 	}
 	VALVE_TQ_RST;
 
-	FLASH_HANDLE(valve->steps);
+	//FLASH_HANDLE(valve->steps);
 	return 0;
 }
 
 int VALVE_CONTROL_CCW_STEP(int step, Valve *valve){ // FEEDS HOT WATER
 	VALVE_CCW_RST;
-	TIMER_US_DELAY(1);
 	VALVE_RST_SET;
-	TIMER_US_DELAY(1);
 	VALVE_EN_SET;
-	TIMER_US_DELAY(1);
 	VALVE_TQ_SET;
-	TIMER_US_DELAY(1);
 
 	VALVE_CLK_RST;
 	for(uint32_t i=0; i<step; i++){//&& (valve->steps > 0)
 		VALVE_CLK_SET;
-		osDelay(10);
+		osDelay(1);
 		VALVE_CLK_RST;
-		osDelay(10);
+		osDelay(1);
 		valve->steps++;
 	}
 

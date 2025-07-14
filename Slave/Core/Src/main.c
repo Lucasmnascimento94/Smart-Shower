@@ -89,7 +89,7 @@ osThreadId_t UartHandle;
 const osThreadAttr_t Uart_attributes = {
   .name = "Uart",
   .stack_size = 1024 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for ds18b20 */
 osThreadId_t ds18b20Handle;
@@ -98,10 +98,126 @@ const osThreadAttr_t ds18b20_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for mainMutex */
-osMutexId_t mainMutexHandle;
-const osMutexAttr_t mainMutex_attributes = {
-  .name = "mainMutex"
+/* Definitions for HuartWorkerTran */
+osThreadId_t HuartWorkerTranHandle;
+const osThreadAttr_t HuartWorkerTran_attributes = {
+  .name = "HuartWorkerTran",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow4,
+};
+/* Definitions for HuartWorkerRece */
+osThreadId_t HuartWorkerReceHandle;
+const osThreadAttr_t HuartWorkerRece_attributes = {
+  .name = "HuartWorkerRece",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow4,
+};
+/* Definitions for ds18b20WorkerTr */
+osThreadId_t ds18b20WorkerTrHandle;
+const osThreadAttr_t ds18b20WorkerTr_attributes = {
+  .name = "ds18b20WorkerTr",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow1,
+};
+/* Definitions for VALVE_WORKER_RE */
+osThreadId_t VALVE_WORKER_REHandle;
+const osThreadAttr_t VALVE_WORKER_RE_attributes = {
+  .name = "VALVE_WORKER_RE",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow3,
+};
+/* Definitions for ScreenWorkerRec */
+osThreadId_t ScreenWorkerRecHandle;
+const osThreadAttr_t ScreenWorkerRec_attributes = {
+  .name = "ScreenWorkerRec",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for ScreenWorkerTra */
+osThreadId_t ScreenWorkerTraHandle;
+const osThreadAttr_t ScreenWorkerTra_attributes = {
+  .name = "ScreenWorkerTra",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for Backup */
+osThreadId_t BackupHandle;
+const osThreadAttr_t Backup_attributes = {
+  .name = "Backup",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for BackupWorkerRec */
+osThreadId_t BackupWorkerRecHandle;
+const osThreadAttr_t BackupWorkerRec_attributes = {
+  .name = "BackupWorkerRec",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for BackupWorkerTra */
+osThreadId_t BackupWorkerTraHandle;
+const osThreadAttr_t BackupWorkerTra_attributes = {
+  .name = "BackupWorkerTra",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for ValveWorkerRece */
+osThreadId_t ValveWorkerReceHandle;
+const osThreadAttr_t ValveWorkerRece_attributes = {
+  .name = "ValveWorkerRece",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow3,
+};
+/* Definitions for Screen */
+osThreadId_t ScreenHandle;
+const osThreadAttr_t Screen_attributes = {
+  .name = "Screen",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for TouchScreen */
+osThreadId_t TouchScreenHandle;
+const osThreadAttr_t TouchScreen_attributes = {
+  .name = "TouchScreen",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for SerialPrint */
+osThreadId_t SerialPrintHandle;
+const osThreadAttr_t SerialPrint_attributes = {
+  .name = "SerialPrint",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for ESP_BUFFER_RE */
+osMessageQueueId_t ESP_BUFFER_REHandle;
+const osMessageQueueAttr_t ESP_BUFFER_RE_attributes = {
+  .name = "ESP_BUFFER_RE"
+};
+/* Definitions for ESP_BUFFER_TR */
+osMessageQueueId_t ESP_BUFFER_TRHandle;
+const osMessageQueueAttr_t ESP_BUFFER_TR_attributes = {
+  .name = "ESP_BUFFER_TR"
+};
+/* Definitions for VALVE_BUFFER_RE */
+osMessageQueueId_t VALVE_BUFFER_REHandle;
+const osMessageQueueAttr_t VALVE_BUFFER_RE_attributes = {
+  .name = "VALVE_BUFFER_RE"
+};
+/* Definitions for VALVE_BUFFER_TR */
+osMessageQueueId_t VALVE_BUFFER_TRHandle;
+const osMessageQueueAttr_t VALVE_BUFFER_TR_attributes = {
+  .name = "VALVE_BUFFER_TR"
+};
+/* Definitions for SerialBuffer */
+osMessageQueueId_t SerialBufferHandle;
+const osMessageQueueAttr_t SerialBuffer_attributes = {
+  .name = "SerialBuffer"
+};
+/* Definitions for DS18B20_BUFFER */
+osMessageQueueId_t DS18B20_BUFFERHandle;
+const osMessageQueueAttr_t DS18B20_BUFFER_attributes = {
+  .name = "DS18B20_BUFFER"
 };
 /* Definitions for valveMutex */
 osMutexId_t valveMutexHandle;
@@ -138,11 +254,6 @@ osEventFlagsId_t UART_CTSHandle;
 const osEventFlagsAttr_t UART_CTS_attributes = {
   .name = "UART_CTS"
 };
-/* Definitions for SCREEM_TOUCH */
-osEventFlagsId_t SCREEM_TOUCHHandle;
-const osEventFlagsAttr_t SCREEM_TOUCH_attributes = {
-  .name = "SCREEM_TOUCH"
-};
 /* Definitions for ESP_RECEIVE */
 osEventFlagsId_t ESP_RECEIVEHandle;
 const osEventFlagsAttr_t ESP_RECEIVE_attributes = {
@@ -153,7 +264,40 @@ osEventFlagsId_t ESP_SENDHandle;
 const osEventFlagsAttr_t ESP_SEND_attributes = {
   .name = "ESP_SEND"
 };
+/* Definitions for TOUCH_SCREEN_FLAG */
+osEventFlagsId_t TOUCH_SCREEN_FLAGHandle;
+const osEventFlagsAttr_t TOUCH_SCREEN_FLAG_attributes = {
+  .name = "TOUCH_SCREEN_FLAG"
+};
 /* USER CODE BEGIN PV */
+
+
+osMemoryPoolId_t SETTINGS_POOLHandle;
+const osMemoryPoolAttr_t SETTINGS_POOL_attributes ={
+		.name = "SETTINGS_POOL"
+};
+
+osMemoryPoolId_t CANVAS_POOLHandle;
+const osMemoryPoolAttr_t CANVAS_POOL_attributes ={
+		.name = "CANVAS"
+};
+
+osMemoryPoolId_t PAGE_POOLHandle;
+const osMemoryPoolAttr_t PAGE_POOL_attributes ={
+		.name = "PAGE"
+};
+
+osMemoryPoolId_t VIEW_POOLHandle;
+const osMemoryPoolAttr_t VIEW_POOL_attributes ={
+		.name = "VIEW"
+};
+
+
+
+
+
+
+
 uint8_t buffer[1];
 uint8_t flag;
 uint8_t act;
@@ -209,13 +353,6 @@ Button button ={
 		.temp_set = 0
 };
 
-Page PAGE = {
-	.button = &button,
-	.flash_position = FLASH_ADDRESS,
-	.hot_temp = &ds18b20_hot,
-	.terminal_temp = &ds18b20_terminal,
-	.valve = &valve
-};
 
 CMD cmd = {
 	.args[0] = {0},
@@ -242,7 +379,9 @@ ESP_DATA_CONTROL esp = {
 	.huart = &huart1,
 	.checksum_s = {0},
 	.esp_buffer = {0},
-	.huart_test = &huart2
+	.huart_test = &huart2,
+	.ESP_BUFFER_REHandle = &ESP_BUFFER_REHandle,
+	.ESP_BUFFER_TRHandle = &ESP_BUFFER_TRHandle
 };
 
 /* USER CODE END PV */
@@ -263,6 +402,19 @@ void mainFunction(void *argument);
 void valveFunction(void *argument);
 void uartFunction(void *argument);
 void ds18b20Function(void *argument);
+void HUART_WORKER_TRANSMIT(void *argument);
+void HUART_WORKER_RECIVE(void *argument);
+void DS18B20_WORKER_TR(void *argument);
+void StartTask08(void *argument);
+void SCREEN_WORKER_RECEIVE(void *argument);
+void SCREEN_WORKER_TRANSMIT(void *argument);
+void BACKUP_FUNCTION(void *argument);
+void BACKUP_WORKER_RECEIVE(void *argument);
+void BACKUP_WORKER_TRANSMIT(void *argument);
+void VALVE_WORKER_RECEIVE(void *argument);
+void ScreenFunction(void *argument);
+void TouchScreenFunction(void *argument);
+void PRINT(void *argument);
 
 /* USER CODE BEGIN PFP */
 void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);
@@ -288,7 +440,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	//esp.ESP_BUFFER_REHandle = ESP_BUFFER_REHandle;
+	//esp.ESP_BUFFER_TRHandle = ESP_BUFFER_TRHandle;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -319,42 +472,26 @@ int main(void)
   MX_SPI4_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  TIMER_US_INIT();
   LCD_Init();
+  HAL_Delay(1000);
   LCD_DrawPage1();
-  VALVE_MODE_FULL_CW();
+  HAL_Delay(1000);
+  TIMER_US_INIT();
+  //VALVE_MODE_FULL_CW();
 
   flag = 0x00;
   page = 0x01;
   command = 0x0;
   act = 0x00;
 
-  uint32_t *p = (uint32_t *)FLASH_ADDRESS;
-  int h = *p;
-  LCD_UpdateFlash(h);
-  HAL_Delay(1000);
+  //uint32_t *p = (uint32_t *)FLASH_ADDRESS;
+  //int h = *p;
 
-  ds18b20_terminal.temperature = ds18b20_get_temperature(&ds18b20_terminal, false, &huart2);
-  ds18b20_hot.temperature = ds18b20_get_temperature(&ds18b20_hot, false, &huart2);
-
-  LCD_UpdateTemperature(&ds18b20_terminal, ds18b20_terminal.temperature);
-  LCD_UpdateTemperature(&ds18b20_hot, ds18b20_hot.temperature);
-
-  // Handle initial positioning -> Return valve to its 0 positioning
-  // Raise STALL flag if Hot temperature is lower then minimum
-  VALVE_CONTROL_HANDLE_INIT(&valve);
-  h = *p;
-  //char msg[20] = "HELLO YOU BUSY";
-  LCD_UpdateFlash(h);
-  HAL_Delay(1000);
   /* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();
   /* Create the mutex(es) */
-  /* creation of mainMutex */
-  mainMutexHandle = osMutexNew(&mainMutex_attributes);
-
   /* creation of valveMutex */
   valveMutexHandle = osMutexNew(&valveMutex_attributes);
 
@@ -382,6 +519,25 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of ESP_BUFFER_RE */
+  ESP_BUFFER_REHandle = osMessageQueueNew (16, sizeof(uint32_t), &ESP_BUFFER_RE_attributes);
+
+  /* creation of ESP_BUFFER_TR */
+  ESP_BUFFER_TRHandle = osMessageQueueNew (16, sizeof(uint32_t), &ESP_BUFFER_TR_attributes);
+
+  /* creation of VALVE_BUFFER_RE */
+  VALVE_BUFFER_REHandle = osMessageQueueNew (16, sizeof(uint32_t), &VALVE_BUFFER_RE_attributes);
+
+  /* creation of VALVE_BUFFER_TR */
+  VALVE_BUFFER_TRHandle = osMessageQueueNew (16, sizeof(uint32_t), &VALVE_BUFFER_TR_attributes);
+
+  /* creation of SerialBuffer */
+  SerialBufferHandle = osMessageQueueNew (200, sizeof(uint32_t), &SerialBuffer_attributes);
+
+  /* creation of DS18B20_BUFFER */
+  DS18B20_BUFFERHandle = osMessageQueueNew (16, sizeof(uint32_t), &DS18B20_BUFFER_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -399,6 +555,45 @@ int main(void)
   /* creation of ds18b20 */
   ds18b20Handle = osThreadNew(ds18b20Function, NULL, &ds18b20_attributes);
 
+  /* creation of HuartWorkerTran */
+  HuartWorkerTranHandle = osThreadNew(HUART_WORKER_TRANSMIT, NULL, &HuartWorkerTran_attributes);
+
+  /* creation of HuartWorkerRece */
+  HuartWorkerReceHandle = osThreadNew(HUART_WORKER_RECIVE, NULL, &HuartWorkerRece_attributes);
+
+  /* creation of ds18b20WorkerTr */
+  ds18b20WorkerTrHandle = osThreadNew(DS18B20_WORKER_TR, NULL, &ds18b20WorkerTr_attributes);
+
+  /* creation of VALVE_WORKER_RE */
+  VALVE_WORKER_REHandle = osThreadNew(StartTask08, NULL, &VALVE_WORKER_RE_attributes);
+
+  /* creation of ScreenWorkerRec */
+  ScreenWorkerRecHandle = osThreadNew(SCREEN_WORKER_RECEIVE, NULL, &ScreenWorkerRec_attributes);
+
+  /* creation of ScreenWorkerTra */
+  ScreenWorkerTraHandle = osThreadNew(SCREEN_WORKER_TRANSMIT, NULL, &ScreenWorkerTra_attributes);
+
+  /* creation of Backup */
+  BackupHandle = osThreadNew(BACKUP_FUNCTION, NULL, &Backup_attributes);
+
+  /* creation of BackupWorkerRec */
+  BackupWorkerRecHandle = osThreadNew(BACKUP_WORKER_RECEIVE, NULL, &BackupWorkerRec_attributes);
+
+  /* creation of BackupWorkerTra */
+  BackupWorkerTraHandle = osThreadNew(BACKUP_WORKER_TRANSMIT, NULL, &BackupWorkerTra_attributes);
+
+  /* creation of ValveWorkerRece */
+  ValveWorkerReceHandle = osThreadNew(VALVE_WORKER_RECEIVE, NULL, &ValveWorkerRece_attributes);
+
+  /* creation of Screen */
+  ScreenHandle = osThreadNew(ScreenFunction, NULL, &Screen_attributes);
+
+  /* creation of TouchScreen */
+  TouchScreenHandle = osThreadNew(TouchScreenFunction, NULL, &TouchScreen_attributes);
+
+  /* creation of SerialPrint */
+  SerialPrintHandle = osThreadNew(PRINT, NULL, &SerialPrint_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -409,14 +604,14 @@ int main(void)
   /* creation of UART_CTS */
   UART_CTSHandle = osEventFlagsNew(&UART_CTS_attributes);
 
-  /* creation of SCREEM_TOUCH */
-  SCREEM_TOUCHHandle = osEventFlagsNew(&SCREEM_TOUCH_attributes);
-
   /* creation of ESP_RECEIVE */
   ESP_RECEIVEHandle = osEventFlagsNew(&ESP_RECEIVE_attributes);
 
   /* creation of ESP_SEND */
   ESP_SENDHandle = osEventFlagsNew(&ESP_SEND_attributes);
+
+  /* creation of TOUCH_SCREEN_FLAG */
+  TOUCH_SCREEN_FLAGHandle = osEventFlagsNew(&TOUCH_SCREEN_FLAG_attributes);
 
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
@@ -440,7 +635,7 @@ int main(void)
 		COMMAND_HANDLE(&htim10, &htim2, &command);
 		// Handle touch screen interrupt
 		if((flag & SCAN_PAD) != 0){
-			SCAN_HANDLE(&ds18b20_hot, &valve, &hspi4, &huart2, &button, &pressed, &act, &flag, &PAGE);
+			//SCAN_HANDLE(&hspi4, &huart2, &button, &pressed, &act, &flag, &PAGE);
 			flag &= (~SCAN_PAD);}
 
 		// Update temperatures, storing them in the Struct.
@@ -473,7 +668,7 @@ int main(void)
 
 		switch (page){
 			case 0x01: // Home Page
-				LCD_HANDLE_PAGE_1(&PAGE, &act, &command);
+				//LCD_HANDLE_PAGE_1(&PAGE, &act, &command);
 				break;
 			case 0x02: // Readings Page
 				break;
@@ -841,10 +1036,10 @@ static void MX_DMA_Init(void)
   HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
   /* DMA2_Stream5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 5, 0);
+  HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 6, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
   /* DMA2_Stream7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 5, 0);
+  HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 6, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 
 }
@@ -928,7 +1123,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : PA8 */
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : Valve_ALERT_Pin */
@@ -948,14 +1143,42 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 8, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
 /* USER CODE BEGIN MX_GPIO_Init_2 */
-  HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
 
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	if (GPIO_Pin == GPIO_PIN_8)
+	    {
+		//static uint32_t last_interrupt_tick = 0;
+		//uint32_t current_tick = HAL_GetTick();
+
+		// This is the debounce logic:
+		// Only process this interrupt if more than 50ms have passed since the last one.
+		//if (current_tick - last_interrupt_tick > 1)
+		//{
+			// This is a valid, debounced event.
+			// Update the time of the last valid interrupt.
+		//	last_interrupt_tick = current_tick;
+
+			// Now, safely set your event flag.
+			// This needs to be the ISR-safe version if you are using native FreeRTOS.
+			// Since you are using CMSIS-OS v2, you might need a different mechanism
+			// like osEventFlagsSet from another task, or better yet, a semaphore.
+			// Let's assume you have a semaphore for this:
+			 osEventFlagsSet(TOUCH_SCREEN_FLAGHandle, SCAN_PAD);
+		//}
+		// If an interrupt arrives within the 50ms window, it is ignored.
+	}
+}
 
 void getFloatString(char *buffer, float number){
 	int intNumber = (int)floor(number);
@@ -969,9 +1192,6 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
         SET_CTS;      // Clear CTS
         FLAG_UART |= ESP_MSG_COMPLETE;
         FLAG_UART |= ESP_UART_RELEASE_MUTEX;
-        //BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        //print_OS_Status(&huart2, osMutexRelease(HUART1Handle));
-       // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }
 
@@ -979,10 +1199,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
     // Your custom code here
 	if(huart->Instance == USART1){
 		FLAG_UART |= ESP_MSG_ACK_SENT;
-		//BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-		//osSemaphoreRelease(HUART1Handle);
-		//portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	}
 }
 
@@ -1003,20 +1219,15 @@ void mainFunction(void *argument)
 {
   /* USER CODE BEGIN 5 */
 	osDelay(200);
-	char msg[100] = "MAIN FUNCTION THREAD\n";
+	//char msg[100] = "MAIN FUNCTION THREAD\n";
 	TickType_t MUTEX_WAIT = 1000;
 	osStatus status;
   /* Infinite loop */
   for(;;)
-  {
-	//HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
+  {	SerialPrint("MAIN FUNCTION THREAD\n");
+	 //HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
 
-	status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
-	if(status == osOK){
-		HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
-		osMutexRelease(HUART2Handle);
-	}
-    osDelay(100);
+    osDelay(1000);
   }
   /* USER CODE END 5 */
 }
@@ -1032,18 +1243,31 @@ void valveFunction(void *argument)
 {
   /* USER CODE BEGIN valveFunction */
 	osDelay(200);
-	char msg[100] = "VALVE FUNCTION THREAD\n";
-	TickType_t MUTEX_WAIT = 1000;
-	osStatus status;
+	VALVE_MODE_FULL_CW();
+	//char msg[100] = "VALVE FUNCTION THREAD\n";
+	//TickType_t MUTEX_WAIT = 1000;
+	//osStatus status;
+	int count = 0, flag = 0;
   /* Infinite loop */
   for(;;)
   {
-	status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
-	if(status == osOK){
-		HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
-		osMutexRelease(HUART2Handle);
+	if(count == 0){
+		flag = 1;
 	}
-    osDelay(500);
+	else if(count == 250){
+		flag = 0;
+	}
+
+
+	if(flag == 1){
+		VALVE_CONTROL_CW_STEP(1, &valve);
+		count++;
+	}
+	else{
+		VALVE_CONTROL_CCW_STEP(1, &valve);
+		count--;
+	}
+    osDelay(50);
   }
   /* USER CODE END valveFunction */
 }
@@ -1058,17 +1282,15 @@ void valveFunction(void *argument)
 void uartFunction(void *argument)
 {
   /* USER CODE BEGIN uartFunction */
-	TickType_t MUTEX_WAIT = 1000;
-	osStatus status;
-	char msg[100] = "UART THREAD\n";
 	  osDelay(1000);
 	  MX_USART1_UART_Init();
 	  FLAG_UART = 0x00;
 	  SET_CTS;
 	  SET_RTS;
 
+	  GPIOB->BSRR = (1U << (16 + 8));
 	  GPIOA->BSRR = (1U << (16));
-	  HAL_Delay(1000);
+	  osDelay(1000);
 	  GPIOA->BSRR = (1U << (0));
 	  GPIOB->BSRR = (1U << 8); // Enable ESP
 	  T_CS_SET;
@@ -1085,25 +1307,14 @@ void uartFunction(void *argument)
 				  ESP_START_PROTOCOL(&esp);
 
 			  }
-			  //UART_DMA_MFLAG(RX_STATUS, &esp);
 			  ESP_HAND_SHAKE_HANDLE(&esp);
-			  //HAL_UART_Transmit(&huart2, (uint8_t *) "UART THREAD\n", 15, 100);
-			 // HAL_UART_Transmit(&huart2, esp.esp_uart_buffer_rx, strlen((char *)esp_uart_buffer), 100);
-			  FLAG_BINARY_PRINT(&huart2, FLAG_UART);
 
 			 if(FLAG_UART != ESP_UART_RELEASE_MUTEX){
 				 osMutexRelease(HUART1Handle);
-				 //print_OS_Status(&huart2, osMutexRelease(HUART1Handle));
 				 FLAG_UART &= ~(ESP_UART_RELEASE_MUTEX);
-			 }
-			 osDelay(100);
+			 }	SerialPrint("UART THREAD\n");
+			 osDelay(2000);
 		   }
-
-			status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
-			if(status == osOK){
-				HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
-				osMutexRelease(HUART2Handle);
-			}
 	  }
 
   /* USER CODE END uartFunction */
@@ -1122,8 +1333,10 @@ void ds18b20Function(void *argument)
 	osDelay(200);
 	char temperature[100];
 	memset(temperature, 0, sizeof(temperature));
-	TickType_t MUTEX_WAIT = 1000;
-	osStatus status;
+	//TickType_t MUTEX_WAIT = 1000;
+	uint8_t prio = 5;
+	//osStatus status;
+	char *ptr;
   //char msg[100] = "DS18B20 FUNCTION THREAD\n";
   /* Infinite loop */
   for(;;)
@@ -1137,18 +1350,336 @@ void ds18b20Function(void *argument)
 	ds18b20_terminal.temperature = terminal_temp;
 	ds18b20_hot.temperature = hot_temp;
 
-	status = osMutexAcquire(HUART2Handle, MUTEX_WAIT);
-	if(status == osOK){
-		getFloatString(temperature, ds18b20_hot.temperature);
-		HAL_UART_Transmit(&huart2, (uint8_t *) temperature, strlen(temperature), 100);
-	    osDelay(1);
-		getFloatString(temperature, ds18b20_terminal.temperature);
-		HAL_UART_Transmit(&huart2, (uint8_t *) temperature, strlen(temperature), 100);
-		osMutexRelease(HUART2Handle);
-	}
-    osDelay(500);
+	getFloatString(temperature, ds18b20_hot.temperature);
+	ptr = temperature;
+	osMessageQueuePut(DS18B20_BUFFERHandle, &ptr, prio, osWaitForever);
+
+	getFloatString(temperature, ds18b20_terminal.temperature);
+	ptr = temperature;
+	osMessageQueuePut(DS18B20_BUFFERHandle, &ptr, prio, osWaitForever);
+	SerialPrint("DS18B20 THREAD\n");
+    osDelay(4000);
   }
   /* USER CODE END ds18b20Function */
+}
+
+/* USER CODE BEGIN Header_HUART_WORKER_TRANSMIT */
+/**
+* @brief Function implementing the HuartWorkerTran thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_HUART_WORKER_TRANSMIT */
+void HUART_WORKER_TRANSMIT(void *argument)
+{
+  /* USER CODE BEGIN HUART_WORKER_TRANSMIT */
+  /* Infinite loop */
+  for(;;)
+  {	SerialPrint("HUART WORKER TRANSMIT THREAD \n");
+    osDelay(2000);
+  }
+  /* USER CODE END HUART_WORKER_TRANSMIT */
+}
+
+/* USER CODE BEGIN Header_HUART_WORKER_RECIVE */
+/**
+* @brief Function implementing the HuartWorkerRece thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_HUART_WORKER_RECIVE */
+void HUART_WORKER_RECIVE(void *argument)
+{
+  /* USER CODE BEGIN HUART_WORKER_RECIVE */
+  osStatus_t status;
+  uint8_t prio = 5;
+  char *ptr;
+  /* Infinite loop */
+  for(;;)
+  {
+		SerialPrint("HUART WORKER RECEIVE THREAD\n");
+	status = osMessageQueueGet(ESP_BUFFER_REHandle, &ptr, &prio, osWaitForever);
+	if(status == osOK){
+		strcpy(cmd.cmd_all, ptr);
+		PARSE_COMMAND(&cmd);
+		//print_CMD(&huart2, &cmd);
+	}
+    osDelay(100);
+  }
+  /* USER CODE END HUART_WORKER_RECIVE */
+}
+
+/* USER CODE BEGIN Header_DS18B20_WORKER_TR */
+/**
+* @brief Function implementing the ds18b20WorkerTr thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_DS18B20_WORKER_TR */
+void DS18B20_WORKER_TR(void *argument)
+{
+  /* USER CODE BEGIN DS18B20_WORKER_TR */
+	osStatus_t status;
+	uint8_t prio = 5;
+	char *ptr;
+  /* Infinite loop */
+  for(;;)
+  {
+	 // SerialPrint("DS18B20 WORKER TRANSMIT THREA\n");
+	//status = osMessageQueueGet(DS18B20_BUFFERHandle, &ptr, &prio, osWaitForever);
+	//if(status == osOK){
+		//osMutexAcquire()
+	//}
+    osDelay(10000);
+  }
+  /* USER CODE END DS18B20_WORKER_TR */
+}
+
+/* USER CODE BEGIN Header_StartTask08 */
+/**
+* @brief Function implementing the VALVE_WORKER_RE thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask08 */
+void StartTask08(void *argument)
+{
+  /* USER CODE BEGIN StartTask08 */
+  /* Infinite loop */
+  for(;;)
+  {
+	SerialPrint("START TASK 08 THREAD \n");
+    osDelay(2000);
+  }
+  /* USER CODE END StartTask08 */
+}
+
+/* USER CODE BEGIN Header_SCREEN_WORKER_RECEIVE */
+/**
+* @brief Function implementing the ScreenWorkerRec thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_SCREEN_WORKER_RECEIVE */
+void SCREEN_WORKER_RECEIVE(void *argument)
+{
+  /* USER CODE BEGIN SCREEN_WORKER_RECEIVE */
+  /* Infinite loop */
+  for(;;)
+  {
+	SerialPrint("SCREEN WORKER RECEIVE THREAD\n");
+    osDelay(2000);
+  }
+  /* USER CODE END SCREEN_WORKER_RECEIVE */
+}
+
+/* USER CODE BEGIN Header_SCREEN_WORKER_TRANSMIT */
+/**
+* @brief Function implementing the ScreenWorkerTra thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_SCREEN_WORKER_TRANSMIT */
+void SCREEN_WORKER_TRANSMIT(void *argument)
+{
+  /* USER CODE BEGIN SCREEN_WORKER_TRANSMIT */
+  /* Infinite loop */
+  for(;;)
+  {
+	 // ESP_RECEIVEHandle
+	//osEventFlagsWait(ESP_RECEIVEHandle);
+	SerialPrint("SCREEN WORKER TRANSMIT THREAD\n");
+    osDelay(2000);
+  }
+  /* USER CODE END SCREEN_WORKER_TRANSMIT */
+}
+
+/* USER CODE BEGIN Header_BACKUP_FUNCTION */
+/**
+* @brief Function implementing the Backup thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_BACKUP_FUNCTION */
+void BACKUP_FUNCTION(void *argument)
+{
+  /* USER CODE BEGIN BACKUP_FUNCTION */
+  /* Infinite loop */
+  for(;;)
+  {
+	SerialPrint("BACKUP FUNCTION THREAD\n");
+    osDelay(2000);
+  }
+  /* USER CODE END BACKUP_FUNCTION */
+}
+
+/* USER CODE BEGIN Header_BACKUP_WORKER_RECEIVE */
+/**
+* @brief Function implementing the BackupWorkerRec thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_BACKUP_WORKER_RECEIVE */
+void BACKUP_WORKER_RECEIVE(void *argument)
+{
+  /* USER CODE BEGIN BACKUP_WORKER_RECEIVE */
+  /* Infinite loop */
+  for(;;)
+  {
+	SerialPrint("BACKUP WORKER RECEIVE THREAD\n");
+    osDelay(2000);
+  }
+  /* USER CODE END BACKUP_WORKER_RECEIVE */
+}
+
+/* USER CODE BEGIN Header_BACKUP_WORKER_TRANSMIT */
+/**
+* @brief Function implementing the BackupWorkerTra thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_BACKUP_WORKER_TRANSMIT */
+void BACKUP_WORKER_TRANSMIT(void *argument)
+{
+  /* USER CODE BEGIN BACKUP_WORKER_TRANSMIT */
+  /* Infinite loop */
+  for(;;)
+  {
+	SerialPrint("BACKUP WORKER TRANSMIT THREAD\n");
+    osDelay(2000);
+  }
+  /* USER CODE END BACKUP_WORKER_TRANSMIT */
+}
+
+/* USER CODE BEGIN Header_VALVE_WORKER_RECEIVE */
+/**
+* @brief Function implementing the ValveWorkerRece thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_VALVE_WORKER_RECEIVE */
+void VALVE_WORKER_RECEIVE(void *argument)
+{
+  /* USER CODE BEGIN VALVE_WORKER_RECEIVE */
+  /* Infinite loop */
+  for(;;)
+  {
+	SerialPrint("VALVE WORKER RECEIVE THREAD\n");
+    osDelay(2000);
+  }
+  /* USER CODE END VALVE_WORKER_RECEIVE */
+}
+
+/* USER CODE BEGIN Header_ScreenFunction */
+/**
+* @brief Function implementing the Screen thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ScreenFunction */
+void ScreenFunction(void *argument)
+{
+  /* USER CODE BEGIN ScreenFunction */
+	uint8_t canvas_count = 20;
+	uint8_t pages_count = 2;
+	uint8_t views_count = 2;
+
+//hspi4
+	//flag = osEventFlagsWait(TOUCH_SCREEN_FLAGHandle, flag_all, osFlagsWaitAny, 0);
+  /* Infinite loop */
+  CANVAS_POOLHandle = osMemoryPoolNew(canvas_count, sizeof(Canvas_t), NULL);
+  SETTINGS_POOLHandle = osMemoryPoolNew(canvas_count, sizeof(struct CanvasConf_t), NULL);
+  PAGE_POOLHandle = osMemoryPoolNew(pages_count, sizeof(Page_t), NULL);
+  VIEW_POOLHandle = osMemoryPoolNew(views_count, sizeof(View_t), NULL);
+
+  //uint32_t flag;
+  //uint32_t index = (0x03)<<30;
+  //uint32_t flag_all = 0xFFFFFFFF & ~(0x01);
+
+  /*Initialize Screen, View and Canvas*/
+  Screen_t screen;
+  GUI_INIT(&screen);
+
+  //LCD_DrawPage1();
+
+  //LCD_UpdateTemperature(&ds18b20_terminal, ds18b20_terminal.temperature);
+  //LCD_UpdateTemperature(&ds18b20_hot, ds18b20_hot.temperature);
+  for(;;)
+  {
+
+    SerialPrint("SCREEN FUNCTION THREAD\n");
+    osDelay(500);
+  }
+  /* USER CODE END ScreenFunction */
+}
+
+/* USER CODE BEGIN Header_TouchScreenFunction */
+/**
+* @brief Function implementing the TouchScreen thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_TouchScreenFunction */
+void TouchScreenFunction(void *argument)
+{
+  /* USER CODE BEGIN TouchScreenFunction */
+  /* Infinite loop */
+  Scan scan_reading;
+  scan_reading.x = 16;
+  scan_reading.y = 50;
+  char s[40];
+  uint32_t f = 0;
+  for(;;)
+  {
+	f = osEventFlagsWait(TOUCH_SCREEN_FLAGHandle, 0x01, osFlagsWaitAny, osWaitForever);
+	if(f & SCAN_PAD){
+		scan(&hspi4, &scan_reading);
+
+		if(scan_reading.x > 0){
+			sprintf(s, "rx-> %d | ry -> %d\n", (int)scan_reading.x, (int)scan_reading.y);
+			SerialPrint(s);
+		}
+	}
+	else{
+		print_OS_Status((osThreadState_t)flag);
+		SerialPrint("TouchScreenFunction -> FAILED TO GET FLAG\n");
+	}
+	osEventFlagsClear(TOUCH_SCREEN_FLAGHandle, (uint32_t)SCAN_PAD);
+    osDelay(100);
+  }
+  /* USER CODE END TouchScreenFunction */
+}
+
+/* USER CODE BEGIN Header_PRINT */
+/**
+* @brief Function implementing the SerialPrint thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_PRINT */
+void PRINT(void *argument)
+{
+  /* USER CODE BEGIN PRINT */
+	//osMessageQueueId_t SerialBufferHandle;
+	osStatus_t status;
+	uint8_t prio = 5;
+	char *ptr;
+  /* Infinite loop */
+  for(;;)
+  {
+	status = osMessageQueueGet(SerialBufferHandle, &ptr, &prio, osWaitForever);
+	if(status == osOK){
+		if(osMutexAcquire(HUART2Handle, osWaitForever) == osOK){
+			HAL_UART_Transmit(&huart2, (uint8_t *)ptr, strlen(ptr), 100);
+			osMutexRelease(HUART2Handle);
+		}
+	}
+	else{
+		print_OS_Status(status);
+	}
+    osDelay(50);
+  }
+  /* USER CODE END PRINT */
 }
 
 /**

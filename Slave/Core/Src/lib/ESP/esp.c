@@ -3,14 +3,16 @@
 
 
 void ESP_HAND_SHAKE_HANDLE(ESP_DATA_CONTROL *esp){
+	TickType_t MUTEX_WAIT = 1000;
+	char s[20];
 	if((FLAG_UART & ESP_RTS) && (FLAG_UART & ESP_MSG_COMPLETE)){
 		//HAL_UART_Transmit(&huart2, (uint8_t *) "RECEIVE CPLT\n", 15, 100);
 
 		//HAL_UART_Transmit(&huart2, esp->esp_uart_buffer_rx, strlen((char *)esp->esp_uart_buffer_rx), 100);
 		//HAL_UART_Transmit(&huart2, (uint8_t *) "MSG ABOVE\n", 15, 100);
 
-
-		esp->checksum = strlen((char*)esp->esp_uart_buffer_rx) - 2;
+		esp->checksum = strlen((char*)esp->esp_uart_buffer_rx);
+		sprintf(s, "checksum: %d\n", esp->checksum);
 		snprintf((char *)esp->esp_uart_buffer_tx, sizeof(esp->esp_uart_buffer_tx), "%d\n", esp->checksum);
 		FLAG_UART &= ~(ESP_MSG_COMPLETE); // Clear Flag of Data transfered
 		FLAG_UART |= ESP_MSG_ACK; // Raise flag for ACK response
@@ -18,25 +20,24 @@ void ESP_HAND_SHAKE_HANDLE(ESP_DATA_CONTROL *esp){
 	}
 
 	if((FLAG_UART & ESP_MSG_ACK) && (FLAG_UART & ESP_MSG_ACK_SENT)){
-		//HAL_UART_Transmit(&huart2, (uint8_t *)"ACK RESPONSE SENT\n", 18, 100);
-		osDelay(10);
+		if(esp->ESP_BUFFER_REHandle == NULL){
+			//HAL_UART_Transmit(&huart2, (uint8_t *) "HANDLE IS NULL\n", 50, 100);
+		}
+		char *ptr = (char *)esp->esp_uart_buffer_rx;
+		osMessageQueuePut(*esp->ESP_BUFFER_REHandle, &ptr, 5, 0);
 		FLAG_UART = 0x00;
 		SET_RTS;
-		memset(esp->esp_uart_buffer_tx, 0, sizeof(esp->esp_uart_buffer_tx));
-		memset(esp->esp_uart_buffer_rx, 0, sizeof(esp->esp_uart_buffer_rx));
-		memset(esp->checksum_s, 0, sizeof(esp->checksum_s));
 		esp->checksum = 0;
 	}
 }
 
 void ESP_START_PROTOCOL(ESP_DATA_CONTROL *esp){
+	memset(esp->esp_uart_buffer_tx, 0, sizeof(esp->esp_uart_buffer_tx));
+	memset(esp->esp_uart_buffer_rx, 0, sizeof(esp->esp_uart_buffer_rx));
+	memset(esp->checksum_s, 0, sizeof(esp->checksum_s));
 	TickType_t MUTEX_WAIT = 1000;
 	esp->rx_status = HAL_TIMEOUT;
 	osStatus_t status = osMutexAcquire(HUART1Handle, MUTEX_WAIT);
-	if(osMutexAcquire(HUART2Handle, MUTEX_WAIT) == osOK){
-		print_OS_Status(&huart2, status);
-		osMutexRelease(HUART2Handle);
-	}
 
 	if(status == osOK){
 		esp->rx_status = HAL_UARTEx_ReceiveToIdle_DMA(esp->huart, esp->esp_uart_buffer_rx, sizeof(esp->esp_uart_buffer_rx));
@@ -48,7 +49,6 @@ void ESP_START_PROTOCOL(ESP_DATA_CONTROL *esp){
 		  }
 		 else{
 			 osMutexRelease(HUART1Handle);
-			 //print_OS_Status(&huart2, osMutexRelease(HUART1Handle));
 		 }
 	}
 	//HAL_UART_Transmit(&huart2, (uint8_t *) "FAIL PROTOCOL\n", 15, 100);
@@ -59,7 +59,6 @@ void ESP_UART_ACK(ESP_DATA_CONTROL *esp){
 	TickType_t MUTEX_WAIT = 1000;
 	esp->tx_status = HAL_TIMEOUT;
 	osStatus_t status = osMutexAcquire(HUART1Handle, MUTEX_WAIT);
-	//print_OS_Status(&huart2, status);
 
 	if(!(FLAG_UART & ESP_MSG_ACK_SENT)){
 		if(status == osOK){

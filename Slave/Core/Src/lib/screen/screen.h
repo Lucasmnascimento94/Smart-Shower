@@ -78,7 +78,7 @@
 
 
 extern Button button;
-void scan(SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button, Pressed *pressed,bool print);
+void scan(SPI_HandleTypeDef *spi, Scan *scan_reading);
 void read_col(Pressed *pressed, uint16_t *x);
 void read_row(Pressed *pressed, uint16_t *x);
 void get_button(Button *button, Pressed *pressed);

@@ -28,25 +28,10 @@
 
 /*#######################################################################################################
 #########################################################################################################
-# 	 	 	 	 	 	 	 	 	 	 UART CONFIGURATION                                             #
-#########################################################################################################
-#########################################################################################################
-*/
-
-extern uint8_t esp_uart_buffer_rx[1024*2];
-extern uint8_t esp_uart_buffer_tx[512];
-
-
-
-
-/*#######################################################################################################
-#########################################################################################################
 # 	 	 	 	 	 	 	 	 	 	    ESP FLAGS AND TYPES                                         #
 #########################################################################################################
 #########################################################################################################
 */
-
-extern uint32_t FLAG_UART;
 
 #define ESP_RTS 0x01
 #define ESP_MSG_COMPLETE 0x02
@@ -54,6 +39,7 @@ extern uint32_t FLAG_UART;
 #define ESP_MSG_ACK_SENT 0x08
 #define ESP_MSG_ACK_COMPLETE 0x10
 #define ESP_UART_RELEASE_MUTEX 0x20
+#define ESP_STORE_DATA_IN_QUEUE
 
 typedef struct{
 	uint8_t esp_uart_buffer_tx[100];
@@ -65,13 +51,19 @@ typedef struct{
 	HAL_StatusTypeDef tx_status;
 	UART_HandleTypeDef *huart;
 	UART_HandleTypeDef *huart_test;
+	osMessageQueueId_t *ESP_BUFFER_REHandle;
+	osMessageQueueId_t *ESP_BUFFER_TRHandle;
 }ESP_DATA_CONTROL;
 
 
+extern uint32_t FLAG_UART;
 extern osMutexId_t HUART1Handle;
 extern osMutexId_t HUART2Handle;
 extern osEventFlagsId_t UART_RTSHandle;
 extern osEventFlagsId_t UART_CTSHandle;
+extern uint8_t esp_uart_buffer_rx[1024*2];
+extern uint8_t esp_uart_buffer_tx[512];
+extern ESP_DATA_CONTROL esp;
 /*#######################################################################################################
 #########################################################################################################
 # 	 	 	 	 	 	 	 	 	 	                                                                #
@@ -84,8 +76,7 @@ extern osEventFlagsId_t UART_CTSHandle;
 #define u32 uint32_t
 
 #define FLASH_ADDRESS 0x08060000
-/* flag */
-#define SCAN_PAD 0x80
+
 
 /* act */
 #define TEMP_UPDATE 0x01
@@ -104,10 +95,6 @@ extern osEventFlagsId_t UART_CTSHandle;
 #define RUN 0x20
 #define RUN_ 0x40
 
-#define SCREEN_PAGE1 0x01
-#define SCREEN_PAGE2 0x02
-#define SCREEN_PAGE3 0x04
-#define SCREEN_PAGE4 0x08
 
 
 #define VALVE_ADJUST_COLD 0x10
@@ -167,25 +154,6 @@ typedef struct{
 }DS18B20;
 
 typedef struct{
-	bool mode_8;
-	bool mode_16;
-	uint32_t width;
-	uint32_t height;
-	uint32_t start_x;
-	uint32_t end_x;
-	uint32_t start_y;
-	uint32_t end_y;
-	uint8_t command;
-	uint8_t *buffer;
-	uint8_t setxcmd;
-	uint8_t setycmd;
-	uint8_t wramcmd;
-	uint16_t data;
-	uint16_t pixel_color;
-	uint16_t background_color;
-}Screen;
-
-typedef struct{
 	float hotWaterTemp;
 	float coldWaterTemp;
 	float terminalWaterTemp;
@@ -225,13 +193,131 @@ typedef struct{
 	float degPerStep;
 }Valve;
 
+/*#######################################################################################################
+#########################################################################################################
+# 	 	 	 	 	 	 	 	 	 	 		SCREEN		                                            #
+#########################################################################################################
+#########################################################################################################
+*/
+
+#define SCREEN_PAGE1 (uint32_t)(0x01 << 30)
+#define SCREEN_PAGE2 (uint32_t)(0x01 << 31)
+#define SCREEN_PAGE3 (uint32_t)(0x03 << 30)
+
+/* flag */
+#define SCAN_PAD 0x01
+#define SCREEN_READY 0x02
+
+
+
 typedef struct {
+	char *effect;
+}Effect_t;
+
+
+/*Display the canvas*/
+typedef struct _canvas{
+	/*Pointing to the next canvas in the page*/
+	struct _canvas *next_canvas;
+	struct CanvasConf_t *settings;
+}Canvas_t;
+
+typedef struct{
+	Canvas_t *home_canvas;
+	Canvas_t *last_canvas;
+	int count;
+}View_t;
+
+typedef struct _Page{
+	struct _Page *next_page;
+	View_t *view;
+	char *ID;
+}Page_t;
+
+typedef struct{
+	Page_t *home_page;
+	Page_t *last_page;
+	int count;
+}Screen_t;
+
+struct CanvasConf_t{
+	char *ID;
+	/*Canvas Size*/
+	uint32_t canvasWidth;
+	uint32_t canvasHeight;
+
+	/*Starting point*/
+	uint32_t canvasStart_x;
+	uint32_t canvasStart_y;
+
+	/*Canvas Color*/
+	uint16_t canvasBackgroundColor;
+	uint16_t canvasFrontColot;
+
+	/*Actions*/
+	bool effects;
+	bool text_only;
+	void *effect_ptr;
+};
+
+
+extern osEventFlagsId_t TOUCH_SCREEN_FLAGHandle;
+extern osMemoryPoolId_t SETTINGS_POOLHandle;
+extern osMemoryPoolId_t CANVAS_POOLHandle;
+extern osMemoryPoolId_t PAGE_POOLHandle;
+extern osMemoryPoolId_t VIEW_POOLHandle;
+
+
+
+
+
+
+
+
+
+typedef struct{
+	bool mode_8;
+	bool mode_16;
+	uint32_t width;
+	uint32_t height;
+	uint32_t start_x;
+	uint32_t end_x;
+	uint32_t start_y;
+	uint32_t end_y;
+	uint8_t command;
+	uint8_t *buffer;
+	uint8_t setxcmd;
+	uint8_t setycmd;
+	uint8_t wramcmd;
+	uint16_t data;
+	uint16_t pixel_color;
+	uint16_t background_color;
+}Screen;
+
+typedef struct{
 	DS18B20 *hot_temp;
 	DS18B20 *terminal_temp;
-	Button *button;
 	uint32_t flash_position;
 	Valve *valve;
-}Page;
+}PageData;
+
+typedef struct{
+	//Page *home; // Home Page
+	Screen *screen; // Screen Configuration
+	int index; // Page Index
+}View;
+
+typedef struct{
+	uint16_t x;
+	uint16_t y;
+}Scan;
+
+/*#######################################################################################################
+#########################################################################################################
+# 	 	 	 	 	 	 	 	 	 	 					                                            #
+#########################################################################################################
+#########################################################################################################
+*/
 
 extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim3;
@@ -251,5 +337,5 @@ extern CMD cmd;
 extern uint8_t act;
 extern Button button;
 extern Valve valve;
-extern ESP_DATA_CONTROL esp;
+extern osMessageQueueId_t SerialBufferHandle;
 #endif

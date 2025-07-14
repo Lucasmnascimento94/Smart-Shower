@@ -14,8 +14,11 @@
 void print_hex_f_array(UART_HandleTypeDef* uart, uint8_t* msg, uint32_t Timeout
 		, bool s_space, bool s_line, bool e_space, bool e_line, bool hex_format);
 
-void print_OS_Status(UART_HandleTypeDef* uart, osStatus_t status);
-void print_Thread_State(UART_HandleTypeDef* uart, osThreadState_t state);
+void print_OS_Status(osStatus_t status);
+void print_Thread_State(osThreadState_t state);
+void print_CMD(CMD *cmd);
+
+void SerialPrint(char * string);
 #endif /* SRC_LIB_SERIAL_PRINTING_SERIAL_PRINTING_H_ */
 
 

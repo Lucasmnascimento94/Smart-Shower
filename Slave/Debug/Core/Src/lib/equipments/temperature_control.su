@@ -8,4 +8,4 @@
 ../Core/Src/lib/equipments/temperature_control.c:32:6:STALL_HANDLE	24	static
 ../Core/Src/lib/equipments/temperature_control.c:51:6:COMMAND_HANDLE	232	static
 ../Core/Src/lib/equipments/temperature_control.c:100:6:VALVE_CONTROL_RUN	32	static
-../Core/Src/lib/equipments/temperature_control.c:112:6:PARSE_COMMAND	16	static
+../Core/Src/lib/equipments/temperature_control.c:112:6:PARSE_COMMAND	24	static

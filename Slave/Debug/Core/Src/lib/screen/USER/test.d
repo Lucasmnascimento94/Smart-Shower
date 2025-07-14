@@ -48,6 +48,7 @@ Core/Src/lib/screen/USER/test.o: ../Core/Src/lib/screen/USER/test.c \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/GUI.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h \
+ C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h \
  ../Core/Src/lib/screen/USER/pic.h
 ../Core/Src/lib/screen/USER/test.h:
 ../Core/Inc/main.h:
@@ -100,4 +101,5 @@ C:/Smart-Shower/smartValve/Core/Src/lib/timer_us/timer_us.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER/GUI.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h:
+C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h:
 ../Core/Src/lib/screen/USER/pic.h:

@@ -48,7 +48,8 @@ Core/Src/lib/equipments/temperature_control.o: \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/FONT.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h \
  C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h \
- C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h
+ C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h \
+ C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h
 ../Core/Src/lib/equipments/temperature_control.h:
 ../Core/Src/lib/equipments/valves.h:
 ../Core/Inc/types.h:
@@ -99,3 +100,4 @@ C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/FONT.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/equipments/valves.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD/lcd.h:
 C:/Smart-Shower/smartValve/Core/Src/lib/screen/screen.h:
+C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing/serial_printing.h:

@@ -7,7 +7,7 @@
 ../Core/Src/lib/screen/screen.c:55:6:SCREEN_INIT	1
 ../Core/Src/lib/screen/screen.c:151:6:GET_IDS	1
 ../Core/Src/lib/screen/screen.c:157:6:SET_WINDOW	1
-../Core/Src/lib/screen/screen.c:172:6:scan	6
-../Core/Src/lib/screen/screen.c:247:6:read_col	7
-../Core/Src/lib/screen/screen.c:260:6:read_row	9
-../Core/Src/lib/screen/screen.c:276:6:get_button	17
+../Core/Src/lib/screen/screen.c:172:6:scan	1
+../Core/Src/lib/screen/screen.c:212:6:read_col	7
+../Core/Src/lib/screen/screen.c:225:6:read_row	9
+../Core/Src/lib/screen/screen.c:241:6:get_button	17

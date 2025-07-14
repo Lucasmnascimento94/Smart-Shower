@@ -95,6 +95,7 @@ void Error_Handler(void);
 #define LCD_T_DIN_GPIO_Port GPIOA
 #define Valve_ALERT_Pin GPIO_PIN_10
 #define Valve_ALERT_GPIO_Port GPIOC
+#define Valve_ALERT_EXTI_IRQn EXTI15_10_IRQn
 #define OneWire_Pin GPIO_PIN_5
 #define OneWire_GPIO_Port GPIOB
 #define ESP_EN_Pin GPIO_PIN_8

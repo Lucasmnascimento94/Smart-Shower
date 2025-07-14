@@ -1,3 +1,6 @@
 ../Core/Src/lib/serial_printing/serial_printing.c:10:6:print_hex_f_array	7
-../Core/Src/lib/serial_printing/serial_printing.c:40:6:print_Thread_State	10
-../Core/Src/lib/serial_printing/serial_printing.c:58:6:print_OS_Status	11
+../Core/Src/lib/serial_printing/serial_printing.c:40:6:SerialPrint	2
+../Core/Src/lib/serial_printing/serial_printing.c:50:6:SerialPrintHex	2
+../Core/Src/lib/serial_printing/serial_printing.c:62:6:print_Thread_State	10
+../Core/Src/lib/serial_printing/serial_printing.c:79:6:print_OS_Status	11
+../Core/Src/lib/serial_printing/serial_printing.c:97:6:print_CMD	1

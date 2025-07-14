@@ -53,6 +53,7 @@
   * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 **************************************************************************************************/
 #include "GUI.h"
+#include "lcd.h"
 extern uint8_t command;
 LCD_COUNTER lcd_coubnter;
 
@@ -776,16 +777,156 @@ void LCD_typeDebug(char *c){
 	Show_Str(20, 30, BLACK, WHITE, c, 12, 1);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void GUI_DRAW_PAGE(Page_t *page){
+	Canvas_t *current_canvas;
+
+	for(current_canvas = page->view->home_canvas; current_canvas != NULL; current_canvas = current_canvas->next_canvas){
+
+	}
+}
+
+void GUI_DRAW_CANVAS(Canvas_t *canvas){
+	struct CanvasConf_t *settings = canvas->settings;
+
+	if(settings->text_only){
+		/*ignore some parameters*/
+	}
+	else{
+		LCD_Fill(
+				settings->canvasStart_x,
+				settings->canvasStart_y,
+				settings->canvasWidth,
+				settings->canvasHeight,
+				settings->canvasBackgroundColor);
+
+	}
+
+}
+
+void GUI_INIT(Screen_t *screen){
+	screen->count = 0;
+
+	GUI_ADD_PAGE(screen, "home_page");
+	struct CanvasConf_t *settings = osMemoryPoolAlloc(SETTINGS_POOLHandle, osWaitForever);
+	if(settings == NULL){
+		SerialPrint("FAILED TO ALLOCATE MEMORY");
+	}
+	settings->ID = "home_canvas";
+	settings->canvasBackgroundColor = BLACK;
+	settings->canvasFrontColot = WHITE;
+	settings->canvasHeight = lcddev.height;
+	settings->canvasWidth = lcddev.width;
+	settings->canvasStart_x = 0;
+	settings->canvasStart_y = 0;
+	settings->effects = false;
+	settings->text_only = false;
+	GUI_ADD_CANVAS(screen->home_page->view, settings);
+	GUI_DRAW_CANVAS(screen->home_page->view->home_canvas);
+}
+
+
+void GUI_ADD_CANVAS(View_t  *view, struct CanvasConf_t *settings){
+	Canvas_t *canvas = osMemoryPoolAlloc(CANVAS_POOLHandle, osWaitForever);
+	if(canvas == NULL){
+		SerialPrint("FAILED TO ALLOCATE MEMORY");
+	}
+
+	canvas->settings = settings;
+
+	if(view->count == 0){
+		view->home_canvas = canvas;
+		view->last_canvas = canvas;
+	}
+	else{
+		view->last_canvas->next_canvas = canvas;
+		view->last_canvas = canvas;
+	}
+	view->count++;
+}
+
+void GUI_DELETE_CANVAS(struct _Page  *screen, char *ID){
+
+}
+
+void GUI_ADD_PAGE(Screen_t *screen, char *ID){
+	Page_t * page = osMemoryPoolAlloc(PAGE_POOLHandle, 0);
+	if(page == NULL){
+		SerialPrint("FAILED TO ALLOCATE MEMORY PAGE\n");
+	}
+	View_t *view = osMemoryPoolAlloc(VIEW_POOLHandle, 0);
+	if(view == NULL){
+		SerialPrint("FAILED TO ALLOCATE MEMORY VIEW\n");
+	}
+
+	page->ID = ID;
+	page->view = view;
+	page->next_page = NULL;
+
+	if(screen->count == 0){
+		screen->home_page = page;
+		screen->last_page = page;
+	}
+	else{
+		screen->last_page->next_page = page;
+		screen->last_page = page;
+	}
+	screen->count++;
+}
+
+void GUI_DELETE_PAGE(Screen_t *screen, char *ID){
+// Free Page_t
+// Free View_t
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
 void SCAN_HANDLE(DS18B20 *hot, Valve *valve, SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button,
 					Pressed *pressed, uint8_t *act, uint8_t *flag, Page *page){
 
-	scan(spi, uart, button, pressed, true);
+	//scan(spi, uart, button, pressed, true);
     if(button->value != -1 && button->valid == true){
     	memset(button->c, 0, sizeof(button->c));
     	button->temp_set = button->data;
     	button->data = (!button->rst)?button->data*10 + button->value: 0;
 
-    	/* Update typed value on the screen and reset flags*/
+
     	sprintf(button->c, "%d", button->data);
 
     	LCD_UpdateTypedTemp(button->c);
@@ -793,7 +934,7 @@ void SCAN_HANDLE(DS18B20 *hot, Valve *valve, SPI_HandleTypeDef *spi, UART_Handle
     		LCD_UpdateTempSet(button->temp_set);
     		*act = *act | TEMP_GET_TEMP_SET | TEMP_GET_VALV_APROX;
     		int calc = 250*((button->temp_set - COLD_TEMP)/((float)50 - COLD_TEMP));
-    		valve->aprox = (int)calc;
+    		//valve->aprox = (int)calc;
     		command |= RUN;
     	}
     	button->valid = false;
@@ -802,31 +943,32 @@ void SCAN_HANDLE(DS18B20 *hot, Valve *valve, SPI_HandleTypeDef *spi, UART_Handle
     	button->set = false;
     }
 }
+ */
+//void LCD_HANDLE_PAGE_1(Page *page, uint8_t *act, uint8_t *command){
 
-void LCD_HANDLE_PAGE_1(Page *page, uint8_t *act, uint8_t *command){
+//	if((*act & TEMP_UPDATE) == TEMP_UPDATE){
+//		LCD_typeDebug("UPDATING TEMPERATURE");
+		//LCD_UpdateTemperature(page->terminal_temp, page->terminal_temp->temperature);
+//		if((*command & STALL_START) == STALL_START){
+		//LCD_STALL_FLAG(page->hot_temp->temperature);
+//			}
+//		else{
+			//LCD_UpdateTemperature(page->hot_temp, page->hot_temp->temperature);
+//	    }
+//	}
 
-	if((*act & TEMP_UPDATE) == TEMP_UPDATE){
-		LCD_typeDebug("UPDATING TEMPERATURE");
-		LCD_UpdateTemperature(page->terminal_temp, page->terminal_temp->temperature);
-		if((*command & STALL_START) == STALL_START){
-		LCD_STALL_FLAG(page->hot_temp->temperature);}
-		else{
-			LCD_UpdateTemperature(page->hot_temp, page->hot_temp->temperature);
-	    }
-	}
+	//if(page->valve->steps != page->valve->current_steps){
+		//LCD_UpdateOpening(page->valve->steps);
 
-	if(page->valve->steps != page->valve->current_steps){
-		LCD_UpdateOpening(page->valve->steps);
+		//page->valve->current_steps = page->valve->steps;
+//		uint32_t *p = (uint32_t*)FLASH_ADDRESS;
+//		int val = *p;
+//		LCD_UpdateFlash(val);
+	//}
 
-		page->valve->current_steps = page->valve->steps;
-		uint32_t *p = (uint32_t*)FLASH_ADDRESS;
-		int val = *p;
-		LCD_UpdateFlash(val);
-	}
+//	*act = *act & (~TEMP_UPDATE);
 
-	*act = *act & (~TEMP_UPDATE);
-
-}
+//}
 
 
 

@@ -37,8 +37,29 @@ void print_hex_f_array(UART_HandleTypeDef* uart, uint8_t* pToArray, uint32_t Tim
 		}
 }
 
-void print_Thread_State(UART_HandleTypeDef* uart, osThreadState_t state){
-	uint32_t Timeout = 1000;
+void SerialPrint(char * string){
+	if( SerialBufferHandle == NULL){
+		HAL_UART_Transmit(&huart2, (uint8_t *) "HANDLE IS NULL\n", 50, 100);
+	}
+	else{
+		char *ptr = string;
+		osMessageQueuePut(SerialBufferHandle, &ptr, 5, 0);
+	}
+}
+
+void SerialPrintHex(uint32_t n){
+	if( SerialBufferHandle == NULL){
+		HAL_UART_Transmit(&huart2, (uint8_t *) "HANDLE IS NULL\n", 50, 100);
+	}
+	else{
+		char num[20];
+		sprintf(num, "%X\n", (int)n);
+		char *ptr = num;
+		osMessageQueuePut(SerialBufferHandle, &ptr, 5, 0);
+	}
+}
+
+void print_Thread_State(osThreadState_t state){
 	char *string_status;
 
 	switch (state){
@@ -51,12 +72,11 @@ void print_Thread_State(UART_HandleTypeDef* uart, osThreadState_t state){
 	case osThreadReserved:   string_status = "Thread -> Reserved\n";                				break;
 	default:                 string_status = "Thread -> Failed to find a state\n";                	break;
 	}
-	HAL_UART_Transmit(uart, (uint8_t *)string_status, strlen(string_status), Timeout);
+	SerialPrint(string_status);
 }
 
 
-void print_OS_Status(UART_HandleTypeDef* uart, osStatus_t status){
-	uint32_t Timeout = 1000;
+void print_OS_Status(osStatus_t status){
 	char *string_status;
 
 	switch (status){
@@ -71,8 +91,24 @@ void print_OS_Status(UART_HandleTypeDef* uart, osStatus_t status){
 		default:               string_status = "Status -> Error_Unknown\n";                    		break;
 	}
 
-	HAL_UART_Transmit(uart, (uint8_t *)string_status, strlen(string_status), Timeout);
+	SerialPrint(string_status);
 }
+
+void print_CMD(CMD *cmd){
+	char s[100]={0};
+
+	sprintf(s, "Origin: %s\nCommand: %s\nProtocol: %s\nArg_1: %s\nArg_2: %s\nArg_3: %s\nArg_4: %s\n",
+			cmd->origin,
+			cmd->command,
+			cmd->protocol,
+			cmd->args[0],
+			cmd->args[1],
+			cmd->args[2],
+			cmd->args[3]);
+
+	SerialPrint(s);
+}
+
 
 
 

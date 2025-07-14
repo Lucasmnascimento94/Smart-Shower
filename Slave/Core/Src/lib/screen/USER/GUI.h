@@ -59,10 +59,10 @@
 #include "lcd.h"
 #include "types.h"
 #include "screen.h"
+#include "serial_printing.h"
 
-
-extern Page page_1;
-extern Page page_2;
+//extern Page page_1;
+//extern Page page_2;
 
 void GUI_DrawPoint(u16 x,u16 y,u16 color);
 void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);
@@ -99,9 +99,18 @@ void LCD_UpdateTemperature(DS18B20 *sensor, float temperature);
 void LCD_UpdateTypedTemp(char *c);
 void LCD_UpdateFlash(int steps);
 void LCD_STALL_FLAG(float temp);
-void SCAN_HANDLE(DS18B20 *hot, Valve *valve, SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button,
-					Pressed *pressed, uint8_t *act, uint8_t *flag, Page *page);
-void LCD_HANDLE_PAGE_1(Page *page, uint8_t *act, uint8_t *command);
+
+void GUI_DRAW_PAGE(Page_t *page);
+void GUI_DRAW_CANVAS(Canvas_t *canvas);
+void GUI_INIT(Screen_t *screen);
+void GUI_ADD_CANVAS(View_t  *view, struct CanvasConf_t *settings);
+void GUI_DELETE_CANVAS(struct _Page  *page, char *ID);
+void GUI_ADD_PAGE(Screen_t *screen, char *ID);
+void GUI_DELETE_PAGE(Screen_t *screen, char *ID);
+
+//void SCAN_HANDLE(SPI_HandleTypeDef *spi, UART_HandleTypeDef *uart, Button *button,
+//					Pressed *pressed, uint8_t *act, uint8_t *flag, Page *page);
+//void LCD_HANDLE_PAGE_1(Page *page, uint8_t *act, uint8_t *command);
 void LCD_typeDebug(char *c);
 #endif
 
