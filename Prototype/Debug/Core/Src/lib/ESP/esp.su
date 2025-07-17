@@ -1,0 +1,4 @@
+../Core/Src/lib/ESP/esp.c:5:6:ESP_HAND_SHAKE_HANDLE	48	static
+../Core/Src/lib/ESP/esp.c:34:6:ESP_START_PROTOCOL	24	static
+../Core/Src/lib/ESP/esp.c:58:6:ESP_UART_ACK	32	static
+../Core/Src/lib/ESP/esp.c:77:6:FLAG_BINARY_PRINT	120	static

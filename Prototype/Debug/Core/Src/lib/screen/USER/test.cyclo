@@ -1,0 +1,10 @@
+../Core/Src/lib/screen/USER/test.c:72:6:DrawTestPage	1
+../Core/Src/lib/screen/USER/test.c:93:6:main_test	1
+../Core/Src/lib/screen/USER/test.c:111:6:Test_Color	1
+../Core/Src/lib/screen/USER/test.c:134:6:Test_FillRec	3
+../Core/Src/lib/screen/USER/test.c:164:6:Test_Circle	3
+../Core/Src/lib/screen/USER/test.c:185:6:English_Font_test	1
+../Core/Src/lib/screen/USER/test.c:207:6:Test_Triangle	3
+../Core/Src/lib/screen/USER/test.c:234:6:Chinese_Font_test	1
+../Core/Src/lib/screen/USER/test.c:251:6:Pic_test	1
+../Core/Src/lib/screen/USER/test.c:271:6:Rotate_Test	2

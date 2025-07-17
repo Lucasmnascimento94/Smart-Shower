@@ -211,7 +211,7 @@ typedef struct{
 #define screenHeight 320
 #define screenWidth 240
 #define nPages 2
-#define nCanvas 35
+#define nCanvas 60
 
 #define DEFAULT 0
 
@@ -225,16 +225,11 @@ typedef struct{
 
 typedef struct _Page{
 	struct _Page *next_page;
-	struct _view *view;
+	struct _canvas *home_canvas;
 	char *Page_ID;
 	int index;
 }Page_t;
 
-typedef struct _view{
-	struct _canvas *home_canvas;
-	struct _canvas *last_canvas;
-	int count;
-}View_t;
 
 /*Display the canvas*/
 typedef struct _canvas{
@@ -242,7 +237,7 @@ typedef struct _canvas{
 	struct _canvas *next_canvas;
 	struct _canvas *parent_canvas;
 	struct _canvas *child_canvas;
-	struct _text *text;
+	struct _textConf_t *text;
 	struct CanvasConf_t *settings;
 	int index;
 }Canvas_t;
@@ -263,6 +258,8 @@ typedef struct CanvasConf_t{
 	char *Parent_ID;
 	char *Page_ID;
 	int index;
+	int cursor_x;
+	int cursor_y;
 
 	/*Canvas Size*/
 	uint32_t canvasWidth;
@@ -283,6 +280,10 @@ typedef struct CanvasConf_t{
 	/*Canvas Color*/
 	uint16_t canvasBackgroundColor;
 
+
+	/*Positioning*/
+	char *display;
+
 	/*Actions*/
 	bool effects;
 	void *effect_ptr;
@@ -290,8 +291,8 @@ typedef struct CanvasConf_t{
 
 typedef struct _textConf_t{
 	/*IDs Relation for linking function*/
+	char *Text_ID;
 	char *Canvas_ID;
-	char *Parent_ID;
 	char *Page_ID;
 	int index;
 
@@ -305,12 +306,21 @@ typedef struct _textConf_t{
 	bool offset_center_y;
 
 
+	/*Starting point*/
+	uint32_t textStart_x;
+	uint32_t textStart_y;
+
+
 	/*Data Display*/
 	bool data_center;
+	bool data_center_y;
 	bool data_top;
 	bool data_bottom;
 	bool data_left;
 	bool data_right;
+
+	/*Text*/
+	char *text;
 
 	/*Text Parameters*/
 	uint16_t text_color;
@@ -330,12 +340,21 @@ struct _pageIndex {
 	int pageCount;
 };
 
+typedef struct _nodeCanvas{
+	struct _canvas* val;
+	struct _nodeCanvas* next;
+}NodeCanvas;
+
+typedef struct{
+	struct _nodeCanvas* head;
+	int count;
+}CanvasStack;
 
 
 
 
 extern uint8_t cmdArray[100];
-extern Screen_t screen;
+extern Screen_t screen_init;
 extern Page_t home_page;
 extern struct _pageIndex pageIndex;
 extern osEventFlagsId_t TOUCH_SCREEN_FLAGHandle;
@@ -343,7 +362,7 @@ extern osMemoryPoolId_t SETTINGS_POOLHandle;
 extern osMemoryPoolId_t CANVAS_POOLHandle;
 extern osMemoryPoolId_t PAGE_POOLHandle;
 extern osMemoryPoolId_t VIEW_POOLHandle;
-
+extern osMemoryPoolId_t NODE_POOLHandle;
 extern osMessageQueueId_t LCD_BUFFER_TRANSMITHandle;
 
 
@@ -408,6 +427,7 @@ typedef struct{
 	Node *tail;
 	int count;
 }List;
+
 
 /*#######################################################################################################
 #########################################################################################################

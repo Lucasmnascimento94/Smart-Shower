@@ -1,0 +1,4 @@
+../Core/Src/lib/screen/screen.c:8:6:scan	1
+../Core/Src/lib/screen/screen.c:48:6:read_col	7
+../Core/Src/lib/screen/screen.c:61:6:read_row	9
+../Core/Src/lib/screen/screen.c:77:6:get_button	17

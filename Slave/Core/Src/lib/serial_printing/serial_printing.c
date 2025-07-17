@@ -47,6 +47,7 @@ void SerialPrint(char * string){
 	}
 }
 
+
 void SerialPrintHex(uint32_t n){
 	if( SerialBufferHandle == NULL){
 		HAL_UART_Transmit(&huart2, (uint8_t *) "HANDLE IS NULL\n", 50, 100);

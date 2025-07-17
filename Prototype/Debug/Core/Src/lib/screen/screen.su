@@ -1,0 +1,4 @@
+../Core/Src/lib/screen/screen.c:8:6:scan	32	static
+../Core/Src/lib/screen/screen.c:48:6:read_col	16	static
+../Core/Src/lib/screen/screen.c:61:6:read_row	16	static
+../Core/Src/lib/screen/screen.c:77:6:get_button	32	static

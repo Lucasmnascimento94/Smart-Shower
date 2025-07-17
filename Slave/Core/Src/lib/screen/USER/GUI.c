@@ -777,6 +777,9 @@ void LCD_typeDebug(char *c){
 	Show_Str(20, 30, BLACK, WHITE, c, 12, 1);
 }
 
+
+
+/*
 void GUI_INIT(Screen_t *screen){
 	screen->count = 0;
 
@@ -882,7 +885,7 @@ void GUI_SET_PAGE1(Page_t *page){
 
 
 
-
+*/
 
 
 

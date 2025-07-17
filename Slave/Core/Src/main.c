@@ -38,6 +38,7 @@
 #include "serial_printing.h"
 #include "esp.h"
 #include "dma.h"
+#include "home_page_layout.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,6 +57,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+CRC_HandleTypeDef hcrc;
+
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi4;
 DMA_HandleTypeDef hdma_spi2_tx;
@@ -175,7 +178,7 @@ const osThreadAttr_t ValveWorkerRece_attributes = {
 osThreadId_t ScreenHandle;
 const osThreadAttr_t Screen_attributes = {
   .name = "Screen",
-  .stack_size = 1024 * 4,
+  .stack_size = 4048 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for TouchScreen */
@@ -300,6 +303,10 @@ const osMemoryPoolAttr_t VIEW_POOL_attributes ={
 		.name = "VIEW"
 };
 
+osMemoryPoolId_t NODE_POOLHandle;
+const osMemoryPoolAttr_t NODE_POOL_attributes ={
+		.name = "NODE"
+};
 
 
 
@@ -406,6 +413,7 @@ static void MX_SPI2_Init(void);
 static void MX_TIM11_Init(void);
 static void MX_SPI4_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_CRC_Init(void);
 void mainFunction(void *argument);
 void valveFunction(void *argument);
 void uartFunction(void *argument);
@@ -479,6 +487,7 @@ int main(void)
   MX_TIM11_Init();
   MX_SPI4_Init();
   MX_TIM2_Init();
+  MX_CRC_Init();
   /* USER CODE BEGIN 2 */
   LCD_Init();
   HAL_Delay(1000);
@@ -541,7 +550,7 @@ int main(void)
   VALVE_BUFFER_TRHandle = osMessageQueueNew (16, sizeof(uint32_t), &VALVE_BUFFER_TR_attributes);
 
   /* creation of SerialBuffer */
-  SerialBufferHandle = osMessageQueueNew (200, sizeof(uint32_t), &SerialBuffer_attributes);
+  SerialBufferHandle = osMessageQueueNew (500, sizeof(uint32_t), &SerialBuffer_attributes);
 
   /* creation of DS18B20_BUFFER */
   DS18B20_BUFFERHandle = osMessageQueueNew (16, sizeof(uint32_t), &DS18B20_BUFFER_attributes);
@@ -737,6 +746,32 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief CRC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_CRC_Init(void)
+{
+
+  /* USER CODE BEGIN CRC_Init 0 */
+
+  /* USER CODE END CRC_Init 0 */
+
+  /* USER CODE BEGIN CRC_Init 1 */
+
+  /* USER CODE END CRC_Init 1 */
+  hcrc.Instance = CRC;
+  if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CRC_Init 2 */
+
+  /* USER CODE END CRC_Init 2 */
+
+}
+
+/**
   * @brief SPI2 Initialization Function
   * @param None
   * @retval None
@@ -797,7 +832,7 @@ static void MX_SPI4_Init(void)
   hspi4.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi4.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi4.Init.NSS = SPI_NSS_SOFT;
-  hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+  hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi4.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -1178,16 +1213,16 @@ static void MX_GPIO_Init(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	if (GPIO_Pin == GPIO_PIN_8)
 	    {
-		//static uint32_t last_interrupt_tick = 0;
-		//uint32_t current_tick = HAL_GetTick();
+		static uint32_t last_interrupt_tick = 0;
+		uint32_t current_tick = HAL_GetTick();
 
 		// This is the debounce logic:
 		// Only process this interrupt if more than 50ms have passed since the last one.
-		//if (current_tick - last_interrupt_tick > 1)
-		//{
+		if (current_tick - last_interrupt_tick > 50)
+		{
 			// This is a valid, debounced event.
 			// Update the time of the last valid interrupt.
-		//	last_interrupt_tick = current_tick;
+			last_interrupt_tick = current_tick;
 
 			// Now, safely set your event flag.
 			// This needs to be the ISR-safe version if you are using native FreeRTOS.
@@ -1195,7 +1230,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			// like osEventFlagsSet from another task, or better yet, a semaphore.
 			// Let's assume you have a semaphore for this:
 			 osEventFlagsSet(TOUCH_SCREEN_FLAGHandle, SCAN_PAD);
-		//}
+		}
 		// If an interrupt arrives within the 50ms window, it is ignored.
 	}
 }
@@ -1244,7 +1279,7 @@ void mainFunction(void *argument)
 	osStatus status;
   /* Infinite loop */
   for(;;)
-  {	SerialPrint("MAIN FUNCTION THREAD\n");
+  {	//SerialPrint("MAIN FUNCTION THREAD\n");
 	 //HAL_UART_Transmit(&huart2, (uint8_t *)msg,strlen(msg), 100);
 
     osDelay(1000);
@@ -1332,7 +1367,8 @@ void uartFunction(void *argument)
 			 if(FLAG_UART != ESP_UART_RELEASE_MUTEX){
 				 osMutexRelease(HUART1Handle);
 				 FLAG_UART &= ~(ESP_UART_RELEASE_MUTEX);
-			 }	SerialPrint("UART THREAD\n");
+			 }
+			 //SerialPrint("UART THREAD\n");
 			 osDelay(2000);
 		   }
 	  }
@@ -1377,7 +1413,7 @@ void ds18b20Function(void *argument)
 	getFloatString(temperature, ds18b20_terminal.temperature);
 	ptr = temperature;
 	osMessageQueuePut(DS18B20_BUFFERHandle, &ptr, prio, osWaitForever);
-	SerialPrint("DS18B20 THREAD\n");
+	//SerialPrint("DS18B20 THREAD\n");
     osDelay(4000);
   }
   /* USER CODE END ds18b20Function */
@@ -1395,7 +1431,7 @@ void HUART_WORKER_TRANSMIT(void *argument)
   /* USER CODE BEGIN HUART_WORKER_TRANSMIT */
   /* Infinite loop */
   for(;;)
-  {	SerialPrint("HUART WORKER TRANSMIT THREAD \n");
+  {	//SerialPrint("HUART WORKER TRANSMIT THREAD \n");
     osDelay(2000);
   }
   /* USER CODE END HUART_WORKER_TRANSMIT */
@@ -1417,7 +1453,7 @@ void HUART_WORKER_RECIVE(void *argument)
   /* Infinite loop */
   for(;;)
   {
-		SerialPrint("HUART WORKER RECEIVE THREAD\n");
+		//SerialPrint("HUART WORKER RECEIVE THREAD\n");
 	status = osMessageQueueGet(ESP_BUFFER_REHandle, &ptr, &prio, osWaitForever);
 	if(status == osOK){
 		strcpy(cmd.cmd_all, ptr);
@@ -1468,7 +1504,7 @@ void StartTask08(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	SerialPrint("START TASK 08 THREAD \n");
+	//SerialPrint("START TASK 08 THREAD \n");
     osDelay(2000);
   }
   /* USER CODE END StartTask08 */
@@ -1487,7 +1523,7 @@ void SCREEN_WORKER_RECEIVE(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	SerialPrint("SCREEN WORKER RECEIVE THREAD\n");
+	//SerialPrint("SCREEN WORKER RECEIVE THREAD\n");
     osDelay(2000);
   }
   /* USER CODE END SCREEN_WORKER_RECEIVE */
@@ -1508,7 +1544,7 @@ void SCREEN_WORKER_TRANSMIT(void *argument)
   {
 	 // ESP_RECEIVEHandle
 	//osEventFlagsWait(ESP_RECEIVEHandle);
-	SerialPrint("SCREEN WORKER TRANSMIT THREAD\n");
+	//SerialPrint("SCREEN WORKER TRANSMIT THREAD\n");
     osDelay(2000);
   }
   /* USER CODE END SCREEN_WORKER_TRANSMIT */
@@ -1527,7 +1563,7 @@ void BACKUP_FUNCTION(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	SerialPrint("BACKUP FUNCTION THREAD\n");
+	//SerialPrint("BACKUP FUNCTION THREAD\n");
     osDelay(2000);
   }
   /* USER CODE END BACKUP_FUNCTION */
@@ -1546,7 +1582,7 @@ void BACKUP_WORKER_RECEIVE(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	SerialPrint("BACKUP WORKER RECEIVE THREAD\n");
+	//SerialPrint("BACKUP WORKER RECEIVE THREAD\n");
     osDelay(2000);
   }
   /* USER CODE END BACKUP_WORKER_RECEIVE */
@@ -1565,7 +1601,7 @@ void BACKUP_WORKER_TRANSMIT(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	SerialPrint("BACKUP WORKER TRANSMIT THREAD\n");
+	//SerialPrint("BACKUP WORKER TRANSMIT THREAD\n");
     osDelay(2000);
   }
   /* USER CODE END BACKUP_WORKER_TRANSMIT */
@@ -1584,7 +1620,7 @@ void VALVE_WORKER_RECEIVE(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	SerialPrint("VALVE WORKER RECEIVE THREAD\n");
+	//SerialPrint("VALVE WORKER RECEIVE THREAD\n");
     osDelay(2000);
   }
   /* USER CODE END VALVE_WORKER_RECEIVE */
@@ -1600,9 +1636,8 @@ void VALVE_WORKER_RECEIVE(void *argument)
 void ScreenFunction(void *argument)
 {
   /* USER CODE BEGIN ScreenFunction */
-	uint8_t canvas_count = 35;
+	uint8_t canvas_count = 60;
 	uint8_t pages_count = 2;
-	uint8_t views_count = 2;
 
 //hspi4
 	//flag = osEventFlagsWait(TOUCH_SCREEN_FLAGHandle, flag_all, osFlagsWaitAny, 0);
@@ -1610,25 +1645,24 @@ void ScreenFunction(void *argument)
   CANVAS_POOLHandle = osMemoryPoolNew(canvas_count, sizeof(Canvas_t), NULL);
   SETTINGS_POOLHandle = osMemoryPoolNew(canvas_count, sizeof(struct CanvasConf_t), NULL);
   PAGE_POOLHandle = osMemoryPoolNew(pages_count, sizeof(Page_t), NULL);
-  VIEW_POOLHandle = osMemoryPoolNew(views_count, sizeof(View_t), NULL);
-
+  NODE_POOLHandle = osMemoryPoolNew(canvas_count, sizeof(struct _nodeCanvas), NULL);
   //uint32_t flag;
   //uint32_t index = (0x03)<<30;
   //uint32_t flag_all = 0xFFFFFFFF & ~(0x01);
 
   /*Initialize Screen, View and Canvas*/
-  Screen_t screen;
-  GUI_INIT(&screen);
+
+  //GUI_INIT(&screen);
 
   //LCD_DrawPage1();
-
+  if(SCREEN_INIT() != 0) return;
   //LCD_UpdateTemperature(&ds18b20_terminal, ds18b20_terminal.temperature);
   //LCD_UpdateTemperature(&ds18b20_hot, ds18b20_hot.temperature);
   for(;;)
   {
-	GUI_DRAW_PAGE(screen.home_page);
-
-    //SerialPrint("SCREEN FUNCTION THREAD\n");
+	//GUI_DRAW_PAGE(screen.home_page);
+	SerialPrint("LOOPING\n");
+	GUI_HANDLE();
     osDelay(500);
   }
   /* USER CODE END ScreenFunction */
