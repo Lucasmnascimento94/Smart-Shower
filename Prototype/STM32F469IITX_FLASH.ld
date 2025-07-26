@@ -48,6 +48,7 @@ MEMORY
   CCMRAM    (xrw)    : ORIGIN = 0x10000000,   LENGTH = 64K
   RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 320K
   FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 2048K
+  SDRAM (xrw)	   : ORIGIN = 0xD0000000, LENGTH = 32M
 }
 
 /* Sections */
@@ -195,14 +196,29 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM
+  
+   .graphics_frame_buffer (NOLOAD) :
+  {
+    . = ALIGN(3); /* Align to 4 bytes */
+    __FRAMEBUFFER_START__ = .; /* Define a global symbol for TouchGFX to find the start address */
+    *(.graphics_frame_buffer) /* This will contain the framebuffer data */
+    
+    /* Reserve space for TWO 800x480 RGB565 framebuffers for double buffering */
+    /* Calculation: 800 pixels * 480 lines * 2 bytes/pixel (RGB565) = 768000 bytes = 0xBC000 */
+    /* For double buffering: 0xBC000 * 2 = 0x178000 bytes */
+    . = . + 0x119400;
+    
+    __FRAMEBUFFER_END__ = .; /* Optional: Define a symbol for the end of the framebuffer area */
+  } >SDRAM AT>SDRAM /* This places the section in the SDRAM memory region */
+  
+ 
 
-  /* Remove information from the compiler libraries */
+    /* Remove information from the compiler libraries */
   /DISCARD/ :
   {
     libc.a ( * )
     libm.a ( * )
     libgcc.a ( * )
   }
-
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }

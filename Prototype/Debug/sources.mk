@@ -45,6 +45,20 @@ Core/lib/lcd \
 Core/lib/serial_printing \
 Drivers/STM32F4xx_HAL_Driver \
 Middlewares/FreeRTOS \
-TouchGFX/build/MINGW32_NT-6.2/generated/images/src \
+TouchGFX/App \
+TouchGFX/generated/fonts/src \
+TouchGFX/generated/gui_generated/src/common \
+TouchGFX/generated/gui_generated/src/containers \
+TouchGFX/generated/gui_generated/src/demo_screen \
+TouchGFX/generated/gui_generated/src/introduction_screen \
 TouchGFX/generated/images/src \
+TouchGFX/generated/texts/src \
+TouchGFX/gui/include/gui/model \
+TouchGFX/gui/src/common \
+TouchGFX/gui/src/containers \
+TouchGFX/gui/src/demo_screen \
+TouchGFX/gui/src/introduction_screen \
+TouchGFX/gui/src/model \
+TouchGFX/target \
+TouchGFX/target/generated \
 

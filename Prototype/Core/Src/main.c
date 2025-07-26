@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "app_touchgfx.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -62,6 +63,8 @@ DMA_HandleTypeDef hdma_adc1;
 
 CRC_HandleTypeDef hcrc;
 
+DMA2D_HandleTypeDef hdma2d;
+
 LTDC_HandleTypeDef hltdc;
 
 QSPI_HandleTypeDef hqspi;
@@ -78,7 +81,7 @@ SDRAM_HandleTypeDef hsdram1;
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 4096 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
@@ -103,6 +106,7 @@ static void MX_UART4_Init(void);
 static void MX_UART8_Init(void);
 static void MX_UART5_Init(void);
 static void MX_CRC_Init(void);
+static void MX_DMA2D_Init(void);
 void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -207,14 +211,18 @@ int main(void)
   MX_UART8_Init();
   MX_UART5_Init();
   MX_CRC_Init();
+  MX_DMA2D_Init();
+  MX_TouchGFX_Init();
+  /* Call PreOsInit function */
+  MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
 
   /* Infinite loop */
 	// Allocate buffer
 
-	  int y_ = 0;
+	//  int y_ = 0;
 
-	  uint16_t yellow_rgb565 = RGB565_Solid_pink;
+	/*  uint16_t yellow_rgb565 = 0x0f0f;
 	  for (int y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
 	          for (int x = 0; x < FRAMEBUFFER_WIDTH; x++) {
 	        	  uint32_t index = y * FRAMEBUFFER_WIDTH + x; // 1D index
@@ -222,7 +230,7 @@ int main(void)
 	              HAL_SDRAM_Write_16b(&hsdram1, (uint32_t *)address, &yellow_rgb565, 1);
 	              address += BYTES_PER_PIXEL; // Increment by 2 bytes for each pixel
 	          }
-	      }
+	      }*/
 	  HAL_Delay(1000);
 
 	//LCD_Fill(BUFFER_LAYER_1_ADDRESS, 0, 0,FRAMEBUFFER_WIDTH,FRAMEBUFFER_HEIGHT,RGB565_Celtic_blue);
@@ -235,16 +243,13 @@ int main(void)
 	//sprintf(msg2, "JUST GOT HERE 7\n");
 	//HAL_UART_Transmit(&huart8, (uint8_t *)msg2, strlen(msg2), 1000);
 
-	//draw_terminal(BUFFER_LAYER_1_ADDRESS);
-	//keypad(BUFFER_LAYER_1_ADDRESS);
-	//draw_futuristic_background(BUFFER_LAYER_1_ADDRESS);
-	PAGE_HOME_INIT_VAR();
-	PAGE_HOME_Draw(BUFFER_LAYER_1_ADDRESS);
+
+	HAL_Delay(1000);
 	ESP_RTS_GPIO_Port->BSRR = 1U << (8+16);
 	//ESP_RTS_GPIO_Port->BSRR = 1U << (8);
 	GPIOC->BSRR = 1U << 2; // YD
 	//char msg1[100] = "RUN 2 200";
-
+//	MX_TouchGFX_Init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -293,28 +298,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  //HAL_SDRAM_Read_8b(&hsdram1, (uint32_t *)BUFFER_LAYER_1, (uint8_t *)myReadData, 4);
-	// Reconfigure ADC to use the correct input channel (e.g., ADC_CHANNEL_9 on PB1)
-	RESTORE_ADC();
-	HAL_ADC_Start(&hadc1);
-	if (HAL_ADC_PollForConversion(&hadc1, 10) == HAL_OK) {
-		y_ = HAL_ADC_GetValue(&hadc1);
-		HAL_ADC_Stop(&hadc1);
-		if (y_ > 2500) {
-			ESP_RTS_GPIO_Port->BSRR = 1U << (8+16);
-			scan_(BUFFER_LAYER_1_ADDRESS);
-			HAL_Delay(500);
-			if (HAL_ADC_Init(&hadc1) != HAL_OK) Error_Handler();
-			ESP_RTS_GPIO_Port->BSRR = 1U << (8);
-		}
-	} else {
-		printf_(BUFFER_LAYER_1_ADDRESS, "ADC timeout");
-	}
-
-	if(cmd.status_busy == true){
-		char *cmdmsg = "BUSY TRUE";
-		printf_(BUFFER_LAYER_1_ADDRESS, cmdmsg);
-	}
-	CMD_HANDLER(BUFFER_LAYER_1_ADDRESS);
+	// Reconfigure ADC to use the correct input channel (e.g., ADC_CHANNEL_9 on PB1
 	//printf_(buffer2, myReadData);
   }
   /* USER CODE END 3 */
@@ -453,6 +437,43 @@ static void MX_CRC_Init(void)
 }
 
 /**
+  * @brief DMA2D Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_DMA2D_Init(void)
+{
+
+  /* USER CODE BEGIN DMA2D_Init 0 */
+
+  /* USER CODE END DMA2D_Init 0 */
+
+  /* USER CODE BEGIN DMA2D_Init 1 */
+
+  /* USER CODE END DMA2D_Init 1 */
+  hdma2d.Instance = DMA2D;
+  hdma2d.Init.Mode = DMA2D_M2M;
+  hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB888;
+  hdma2d.Init.OutputOffset = 0;
+  hdma2d.LayerCfg[1].InputOffset = 0;
+  hdma2d.LayerCfg[1].InputColorMode = DMA2D_INPUT_RGB888;
+  hdma2d.LayerCfg[1].AlphaMode = DMA2D_NO_MODIF_ALPHA;
+  hdma2d.LayerCfg[1].InputAlpha = 0;
+  if (HAL_DMA2D_Init(&hdma2d) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_DMA2D_ConfigLayer(&hdma2d, 1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN DMA2D_Init 2 */
+
+  /* USER CODE END DMA2D_Init 2 */
+
+}
+
+/**
   * @brief LTDC Initialization Function
   * @param None
   * @retval None
@@ -496,12 +517,12 @@ static void MX_LTDC_Init(void)
   pLayerCfg.WindowX1 = 800;
   pLayerCfg.WindowY0 = 0;
   pLayerCfg.WindowY1 = 480;
-  pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
+  pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB888;
   pLayerCfg.Alpha = 255;
   pLayerCfg.Alpha0 = 0;
   pLayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
   pLayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
-  pLayerCfg.FBStartAdress = 0;
+  pLayerCfg.FBStartAdress = ((uint32_t)0xD0000000);
   pLayerCfg.ImageWidth = 800;
   pLayerCfg.ImageHeight = 480;
   pLayerCfg.Backcolor.Blue = 0;
@@ -512,64 +533,7 @@ static void MX_LTDC_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN LTDC_Init 2 */
-  hltdc.Instance = LTDC;
-  hltdc.Init.HSPolarity = LTDC_HSPOLARITY_AL;
-  hltdc.Init.VSPolarity = LTDC_VSPOLARITY_AL;
-  hltdc.Init.DEPolarity = LTDC_DEPOLARITY_AL;
-  hltdc.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
-  hltdc.Init.HorizontalSync = 40;
-  hltdc.Init.VerticalSync = 19;
-  hltdc.Init.AccumulatedHBP = 86;
-  hltdc.Init.AccumulatedVBP = 42;
-  hltdc.Init.AccumulatedActiveW = 886;
-  hltdc.Init.AccumulatedActiveH = 522;
-  hltdc.Init.TotalWidth = 1096;
-  hltdc.Init.TotalHeigh = 544;
-  hltdc.Init.Backcolor.Blue = 0;
-  hltdc.Init.Backcolor.Green = 0;
-  hltdc.Init.Backcolor.Red = 0;
-  if (HAL_LTDC_Init(&hltdc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  pLayerCfg.WindowX0 = 0;
-  pLayerCfg.WindowX1 = 800;
-  pLayerCfg.WindowY0 = 0;
-  pLayerCfg.WindowY1 = 480;
-  pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
-  pLayerCfg.Alpha = 255;
-  pLayerCfg.Alpha0 = 0;
-  pLayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
-  pLayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
-  pLayerCfg.FBStartAdress = BUFFER_LAYER_1_ADDRESS;
-  pLayerCfg.ImageWidth = FRAMEBUFFER_WIDTH;
-  pLayerCfg.ImageHeight = FRAMEBUFFER_HEIGHT;
-  pLayerCfg.Backcolor.Blue = 0;
-  pLayerCfg.Backcolor.Green = 0;
-  pLayerCfg.Backcolor.Red = 0;
-  if (HAL_LTDC_ConfigLayer(&hltdc, &pLayerCfg, 0) != HAL_OK)
-  {
-    Error_Handler();
-  }
- /* pLayerCfg1.WindowX0 = 0;
-  pLayerCfg1.WindowX1 = INNERBUFFER_WIDTH;
-  pLayerCfg1.WindowY0 = 0;
-  pLayerCfg1.WindowY1 = INNERBUFFER_HEIGHT;
-  pLayerCfg1.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
-  pLayerCfg1.Alpha = 0;
-  pLayerCfg1.Alpha0 = 0;
-  pLayerCfg1.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
-  pLayerCfg1.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
-  pLayerCfg1.FBStartAdress = (uint32_t)BUFFER_LAYER_2_ADDRESS;
-  pLayerCfg1.ImageWidth = INNERBUFFER_WIDTH;
-  pLayerCfg1.ImageHeight = INNERBUFFER_HEIGHT;
-  pLayerCfg1.Backcolor.Blue = 0;
-  pLayerCfg1.Backcolor.Green = 0;
-  pLayerCfg1.Backcolor.Red = 0;
-  if (HAL_LTDC_ConfigLayer(&hltdc, &pLayerCfg1, 1) != HAL_OK)
-  {
-    Error_Handler();
-  }*/
+
   /* USER CODE END LTDC_Init 2 */
 
 }
@@ -953,7 +917,7 @@ void RESTORE_ADC(){
 	GPIO_InitStruct.Pin = GPIO_PIN_1;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-	osDelay(10);
+	//osDelay(10);
 
 	sConfig.Channel = ADC_CHANNEL_9;
 	sConfig.Rank = 1;
@@ -985,12 +949,8 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	char msg8[100];
-	sprintf(msg8,"Main Function  ###### MAIN #####\n");
-
-
-	HAL_UART_Transmit(&huart8, (uint8_t *)msg8, strlen(msg8), 1000);
-    osDelay(500);
+	MX_TouchGFX_Process();
+    osDelay(1);
   }
   /* USER CODE END 5 */
 }

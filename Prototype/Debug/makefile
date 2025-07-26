@@ -9,8 +9,22 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include TouchGFX/target/generated/subdir.mk
+-include TouchGFX/target/subdir.mk
+-include TouchGFX/gui/src/model/subdir.mk
+-include TouchGFX/gui/src/introduction_screen/subdir.mk
+-include TouchGFX/gui/src/demo_screen/subdir.mk
+-include TouchGFX/gui/src/containers/subdir.mk
+-include TouchGFX/gui/src/common/subdir.mk
+-include TouchGFX/gui/include/gui/model/subdir.mk
+-include TouchGFX/generated/texts/src/subdir.mk
 -include TouchGFX/generated/images/src/subdir.mk
--include TouchGFX/build/MINGW32_NT-6.2/generated/images/src/subdir.mk
+-include TouchGFX/generated/gui_generated/src/introduction_screen/subdir.mk
+-include TouchGFX/generated/gui_generated/src/demo_screen/subdir.mk
+-include TouchGFX/generated/gui_generated/src/containers/subdir.mk
+-include TouchGFX/generated/gui_generated/src/common/subdir.mk
+-include TouchGFX/generated/fonts/src/subdir.mk
+-include TouchGFX/App/subdir.mk
 -include Middlewares/FreeRTOS/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/subdir.mk
 -include Core/lib/serial_printing/subdir.mk
@@ -90,8 +104,8 @@ all: main-build
 main-build: Prototype.elf secondary-outputs
 
 # Tool invocations
-Prototype.elf Prototype.map: $(OBJS) $(USER_OBJS) C:\Users\lucas\OneDrive\Documentos\GitHub\Smart-Shower\Prototype\STM32F469IITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "Prototype.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\lucas\OneDrive\Documentos\GitHub\Smart-Shower\Prototype\STM32F469IITX_FLASH.ld" -Wl,-Map="Prototype.map" -Wl,--gc-sections -static -L"C:\Users\lucas\OneDrive\Documentos\GitHub\Smart-Shower\Prototype\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Prototype.elf Prototype.map: $(OBJS) $(USER_OBJS) C:\Users\lucas\OneDrive\UMB\Prototype\STM32F469IITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "Prototype.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\lucas\OneDrive\UMB\Prototype\STM32F469IITX_FLASH.ld" -Wl,-Map="Prototype.map" -Wl,--gc-sections -static -L"C:\Users\lucas\OneDrive\UMB\Prototype\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

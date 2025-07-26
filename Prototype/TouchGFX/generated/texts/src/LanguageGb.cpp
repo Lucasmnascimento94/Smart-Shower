@@ -10,5 +10,32 @@ KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE;
 // Remap all strings
 TEXT_LOCATION_FLASH_PRAGMA
 KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
-    0
+    1440, // T___SINGLEUSE_8CK6: "<>"
+    1419, // T___SINGLEUSE_JADC: "0"
+    1455, // T___SINGLEUSE_57E3: "input"
+    1409, // T___SINGLEUSE_U18S: "output + 10"
+    1471, // T_UI: "UI"
+    1442, // T_SYSTEM: "System"
+    1466, // T_VIEW: "View"
+    1421, // T_PRESENTER: "Presenter"
+    1449, // T_MODEL: "Model"
+    0,    // T_INTRODUCTION: "Understanding MVP\n\nThis application will help you understand\nthe model, view, presenter structure \nof TouchGFX applications\n\nMove left or right by using the arrows"
+    1391, // T_UNDERSTANDING: "Understanding MVP"
+    1340, // T_INPUT: "Example\nInput from system"
+    1366, // T_OUTPUT: "Example\nOutput to system"
+    1205, // T_SYSTEM_INPUT_CODE: "int control_read_current_temperature() {\n  //...\n}"
+    1256, // T_SYSTEM_OUTPUT_CODE: "void control_set_room_temperature() {\n  //...\n}"
+    164,  // T_VIEW_DESCRIPTION: "Views describe the visual appearance of your ui.\nViews consist of widgets - boxes, images, buttons, ...\nViews have handlers for reacting to user events"
+    898,  // T_VIEW_INPUT_CODE: "void TemperatureView::updateCurrent(int t) {\n  temperatureWidget.setValue(t);\n}"
+    1133, // T_VIEW_OUTPUT_CODE: "void TemperatureView::buttonClicked() {\n  presenter->buttonClicked();\n}"
+    1056, // T_PRESENTER_INPUT_CODE: "void TemperaturePresenter::updateCurrent(int t) {\n  view.updateCurrent(t);\n}"
+    813,  // T_PRESENTER_OUTPUT_CODE: "void TemperaturePresenter::buttonClicked() {\n  model->requestAdjustTemperature();\n}\n"
+    598,  // T_MODEL_INPUT_CODE: "void Model::tick() {\n  temperature = control_read_current_temperature();\n  modelListener->updateCurrent(temperature);\n}"
+    978,  // T_MODEL_OUTPUT_CODE: "void Model::requestAdjustTemperature() {\n  control_set_room_temperature();\n}\n"
+    1304, // T_MVP_IN_SHORT: "MVP connects your UI to your system"
+    718,  // T_PRESENTER_DESCRIPTION: "Presenters mediate between the views and the model\nPresenters contain the behaviour of the ui "
+    316,  // T_MODEL_DESCRIPTION: "The model holds the state of the ui\nThe model is the point of integration with your system\nYou write the code for communicating with your system"
+    461,  // T_SYSTEM_DESCRIPTION: "The system is everything outside TouchGFX\nThe system has methods for controlling your hardware\nThe system can be implemented in C or C++"
+    1461, // T_DEMO: "Demo"
+    1431  // T___SINGLEUSE_TWGT: "New Text"
 };

@@ -40,20 +40,9 @@ Core/lib/lcd/pages.o: ../Core/lib/lcd/pages.c ../Core/lib/lcd/pages.h \
  C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_qspi.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- ../Core/Inc/FreeRTOSConfig.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../Core/Inc/main.h \
- C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Prototype/Core/lib/lcd/RGB565_COLOR.h \
- C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Prototype/Core/lib/lcd/pages.h \
+ C:/Users/lucas/OneDrive/UMB/Prototype/Core/lib/lcd/RGB565_COLOR.h \
+ C:/Users/lucas/OneDrive/UMB/Prototype/Core/lib/lcd/pages.h \
  ../Core/lib/lcd/GUI.h ../Core/Inc/main.h ../Core/lib/lcd/FONT.h
 ../Core/lib/lcd/pages.h:
 ../Core/Inc/types.h:
@@ -97,20 +86,9 @@ C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HA
 C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_qspi.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
-../Core/Inc/FreeRTOSConfig.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
-C:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 ../Core/Inc/main.h:
-C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Prototype/Core/lib/lcd/RGB565_COLOR.h:
-C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Prototype/Core/lib/lcd/pages.h:
+C:/Users/lucas/OneDrive/UMB/Prototype/Core/lib/lcd/RGB565_COLOR.h:
+C:/Users/lucas/OneDrive/UMB/Prototype/Core/lib/lcd/pages.h:
 ../Core/lib/lcd/GUI.h:
 ../Core/Inc/main.h:
 ../Core/lib/lcd/FONT.h:

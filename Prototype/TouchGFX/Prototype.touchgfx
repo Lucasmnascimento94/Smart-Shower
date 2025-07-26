@@ -2,44 +2,243 @@
   "Application": {
     "Screens": [
       {
-        "Name": "screen",
+        "Name": "Introduction",
         "Components": [
           {
-            "Type": "ScalableImage",
-            "Name": "scalableImage1",
+            "Type": "Box",
+            "Name": "background",
             "Width": 800,
             "Height": 480,
-            "ScalingAlgorithm": "Nearest-neighbor"
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "headline",
+            "Y": 73,
+            "Width": 800,
+            "Height": 298,
+            "TextId": "introduction",
+            "TextRotation": "0",
+            "Fadeable": true,
+            "Moveable": true
           },
           {
             "Type": "Image",
-            "Name": "Image1",
-            "X": -244,
-            "Y": -163,
-            "Width": 1280,
-            "Height": 720,
-            "RelativeFilename": "c7a0b75a-e044-4c74-9d50-75d7b3df9ec1.png"
+            "Name": "arrow_left",
+            "X": 6,
+            "Y": 224,
+            "Width": 16,
+            "Height": 16,
+            "RelativeFilename": "arrow_left.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "arrow_right",
+            "X": 776,
+            "Y": 224,
+            "Width": 16,
+            "Height": 16,
+            "RelativeFilename": "arrow_right.png"
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerPhysicalButtonClicked"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "West",
+              "ActionComponent": "Demo"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Demo",
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "background",
+            "Width": 800,
+            "Height": 480,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "hw_input_value",
+            "Y": 147,
+            "Width": 800,
+            "Height": 156,
+            "TextId": "__SingleUse_8CK6",
+            "TextRotation": "0",
+            "Wildcard1": {
+              "TextId": "__SingleUse_JADC",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "hw_input",
+            "X": 360,
+            "Y": 146,
+            "Width": 71,
+            "Height": 38,
+            "TextId": "__SingleUse_57E3",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "ButtonWithLabel",
+            "Name": "hw_output",
+            "X": 220,
+            "Y": 311,
+            "Width": 360,
+            "Height": 60,
+            "Pressed": "dark_button_pressed.png",
+            "Released": "dark_button.png",
+            "TextId": "__SingleUse_U18S",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0"
+          },
+          {
+            "Type": "Button",
+            "Name": "arrow_left",
+            "X": 6,
+            "Y": 224,
+            "Width": 16,
+            "Height": 16,
+            "Pressed": "arrow_left.png",
+            "Released": "arrow_left.png"
+          },
+          {
+            "Type": "Button",
+            "Name": "arrow_right",
+            "X": 776,
+            "Y": 224,
+            "Width": 16,
+            "Height": 16,
+            "Pressed": "arrow_right.png",
+            "Released": "arrow_right.png"
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "ButtonClicked",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "hw_output"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "buttonClicked"
+            }
+          },
+          {
+            "InteractionName": "GoBack",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "arrow_left"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "West",
+              "ActionComponent": "Introduction"
+            }
+          },
+          {
+            "InteractionName": "GoForward",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "arrow_right"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Introduction"
+            }
+          }
+        ]
+      }
+    ],
+    "CustomContainerDefinitions": [
+      {
+        "Name": "LabelBox",
+        "Width": 200,
+        "Height": 80,
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "border",
+            "Width": 200,
+            "Height": 80
+          },
+          {
+            "Type": "Box",
+            "Name": "background",
+            "X": 1,
+            "Y": 1,
+            "Width": 198,
+            "Height": 78,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text",
+            "X": 1,
+            "Y": 1,
+            "Width": 198,
+            "Height": 79,
+            "TextId": "__SingleUse_TWGT",
+            "TextRotation": "0"
           }
         ],
         "Interactions": []
       }
     ],
-    "CustomContainerDefinitions": [],
     "Name": "MyApplication",
     "Resolution": {
       "Width": 800,
       "Height": 480
     },
-    "SelectedColorDepth": 16,
-    "StartupScreenName": "screen",
+    "SelectedColorDepth": 24,
+    "StartupScreenName": "Introduction",
     "SelectedStartupLanguage": "GB",
     "TouchGfxPath": "../Middlewares/ST/touchgfx",
     "UIPath": ".",
     "AvailableColorDepths": [
-      16
+      24
     ],
     "AvailableLCDs": {
-      "16": "LCD16bpp"
+      "16": "LCD16bpp",
+      "32": "LCD32bpp",
+      "24": "LCD24bpp"
     },
     "AvailableSections": [
       "ExtFlashSection",
@@ -53,8 +252,8 @@
     ],
     "PhysicalButtons": [],
     "FrameworkFeatures": {
-      "LCD16bpp": {
-        "Id": "LCD16bpp",
+      "LCD24bpp": {
+        "Id": "LCD24bpp",
         "IsEnabled": true
       }
     },

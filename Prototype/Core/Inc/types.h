@@ -5,7 +5,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stm32f4xx_hal.h"
-#include "cmsis_os.h"
+//#include "cmsis_os.h"
 #include "string.h"
 #include "math.h"
 #include "stdbool.h"
@@ -339,10 +339,10 @@ extern uint32_t MAIN_THREAD_ADC_CONTROL_BIT;
 extern uint32_t MAIN_THREAD_UART_CONTROL_BIT;
 extern uint32_t MAIN_THREAD_LCD_CONTROL_BIT;
 
-extern osMutexId_t mainMutexHandle;
-extern osMutexId_t adcControllerMutexHandle;
-extern osMutexId_t lcdControllerMutexHandle;
-extern osMutexId_t uartControllerMutexHandle;
+//extern osMutexId_t mainMutexHandle;
+//extern osMutexId_t adcControllerMutexHandle;
+//extern osMutexId_t lcdControllerMutexHandle;
+//extern osMutexId_t uartControllerMutexHandle;
 
 extern DATA_HOLDER mainDataHolder;
 /*#######################################################################################################
@@ -355,7 +355,7 @@ extern Button button;
 extern Pressed pressed;
 extern uint32_t ADC_THREAD_CONTROL_BIT;
 
-extern osMutexId_t adcMutexHandle;
+//extern osMutexId_t adcMutexHandle;
 /*#######################################################################################################
 #########################################################################################################
 # 	 	 	 	 	 	 	 	 	 	UART THREAD GLOBAL VARIABLES                                    #
@@ -375,7 +375,7 @@ extern uint32_t UART_THREAD_CONTROL_BIT;
 extern CMD cmd;
 
 extern char uartBuffer[1024];
-extern osMutexId_t uartMutexHandle;
+//extern osMutexId_t uartMutexHandle;
 
 /*#######################################################################################################
 #########################################################################################################
@@ -387,7 +387,7 @@ extern TERMINAL terminal;
 extern PAD pad;
 extern uint32_t LCD_THREAD_CONTROL_BIT;
 extern DATA_HOLDER lcdDataHolder;
-extern osMutexId_t lcdMutexHandle;
+//extern osMutexId_t lcdMutexHandle;
 /*#######################################################################################################
 #########################################################################################################
 # 	 	 	 	 	 	 	 	 	       TYPEDEF STRUCTS                                              #
