@@ -39,21 +39,12 @@ CPP_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Core/Src \
-Core/Src/lib/DMA \
-Core/Src/lib/ESP \
-Core/Src/lib/UART_FUNC \
-Core/Src/lib/ds18b20_lib \
-Core/Src/lib/equipments \
-Core/Src/lib/screen/LCD \
-Core/Src/lib/screen/LED \
-Core/Src/lib/screen/USER \
-Core/Src/lib/screen \
-Core/Src/lib/serial_printing \
-Core/Src/lib/timer_us \
 Core/Startup \
-Drivers/STM32F4xx_HAL_Driver/Src \
-Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
-Middlewares/Third_Party/FreeRTOS/Source \
-Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F \
-Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
+Core/lib/control \
+Core/lib/lcd \
+Core/lib/serial_printing \
+Drivers/STM32F4xx_HAL_Driver \
+Middlewares/FreeRTOS \
+TouchGFX/build/MINGW32_NT-6.2/generated/images/src \
+TouchGFX/generated/images/src \
 

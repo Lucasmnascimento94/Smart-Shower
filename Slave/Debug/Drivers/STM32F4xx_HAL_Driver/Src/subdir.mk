@@ -24,26 +24,6 @@ C_SRCS += \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c 
 
-C_DEPS += \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d 
-
 OBJS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o \
@@ -64,10 +44,30 @@ OBJS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o 
 
+C_DEPS += \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.d \
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d 
+
 
 # Each subdirectory must supply rules for building sources it contributes
 Drivers/STM32F4xx_HAL_Driver/Src/%.o Drivers/STM32F4xx_HAL_Driver/Src/%.su Drivers/STM32F4xx_HAL_Driver/Src/%.cyclo: ../Drivers/STM32F4xx_HAL_Driver/Src/%.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/Smart-Shower/smartValve/Core/Src/lib" -I"C:/Smart-Shower/smartValve/Core/Src/lib/definitions" -I"C:/Smart-Shower/smartValve/Core/Src/lib/ds18b20_lib" -I"C:/Smart-Shower/smartValve/Core/Src/lib/equipments" -I"C:/Smart-Shower/smartValve/Core/Src/lib/ESP" -I"C:/Smart-Shower/smartValve/Core/Src/lib/screen" -I"C:/Smart-Shower/smartValve/Core/Src/lib/serial_printing" -I"C:/Smart-Shower/smartValve/Core/Src/lib/timer_us" -I"C:/Smart-Shower/smartValve/Core/Src/lib/screen/USER" -I"C:/Smart-Shower/smartValve/Core/Src/lib/screen/LCD" -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I"C:/Smart-Shower/smartValve/Core/Src/lib/UART_FUNC" -I"C:/Smart-Shower/smartValve/Core/Src/lib/DMA" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -IC:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc -IC:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -IC:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include -IC:/Users/lucas/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.1/Drivers/CMSIS/Include -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/ds18b20_lib" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/serial_printing" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/timer_us" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/equipments" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/definitions" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/screen" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/screen/USER" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/screen/LED" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/screen/LCD" -I"C:/Users/lucas/OneDrive/Documentos/GitHub/Smart-Shower/Slave/Core/Src/lib/ESP" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 clean: clean-Drivers-2f-STM32F4xx_HAL_Driver-2f-Src
 

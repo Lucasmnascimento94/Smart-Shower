@@ -163,7 +163,7 @@ void Set_ADC_Channel_GPIO(uint32_t channel) {
 }
 
 void scan_(uint32_t frameBuffer) {
-    int x_reading[SAMPLE_SIZE] = {0};
+ /*   int x_reading[SAMPLE_SIZE] = {0};
     int y_reading[SAMPLE_SIZE] = {0};
     int result[2] = {0};
     int x_ = 2500, y_ = 500, i=0;
@@ -327,6 +327,7 @@ void scan_(uint32_t frameBuffer) {
 	sprintf(msg8,"LEFT SCAN WITH SUCCESS\n");
 	HAL_UART_Transmit(&huart8, (uint8_t *)msg8, strlen(msg8), 1);
 	osMutexRelease(adcMutexHandle);
+	*/
 }
 
 void get_value(int *x, int *y, int *result, int size){

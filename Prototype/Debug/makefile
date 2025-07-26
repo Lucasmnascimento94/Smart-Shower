@@ -9,23 +9,14 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
--include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
+-include TouchGFX/generated/images/src/subdir.mk
+-include TouchGFX/build/MINGW32_NT-6.2/generated/images/src/subdir.mk
+-include Middlewares/FreeRTOS/subdir.mk
+-include Drivers/STM32F4xx_HAL_Driver/subdir.mk
+-include Core/lib/serial_printing/subdir.mk
+-include Core/lib/lcd/subdir.mk
+-include Core/lib/control/subdir.mk
 -include Core/Startup/subdir.mk
--include Core/Src/lib/timer_us/subdir.mk
--include Core/Src/lib/serial_printing/subdir.mk
--include Core/Src/lib/screen/USER/subdir.mk
--include Core/Src/lib/screen/LED/subdir.mk
--include Core/Src/lib/screen/LCD/subdir.mk
--include Core/Src/lib/screen/subdir.mk
--include Core/Src/lib/equipments/subdir.mk
--include Core/Src/lib/ds18b20_lib/subdir.mk
--include Core/Src/lib/UART_FUNC/subdir.mk
--include Core/Src/lib/ESP/subdir.mk
--include Core/Src/lib/DMA/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk
 
@@ -73,34 +64,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := smartValve
+BUILD_ARTIFACT_NAME := Prototype
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-smartValve.elf \
+Prototype.elf \
 
 MAP_FILES += \
-smartValve.map \
+Prototype.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-smartValve.list \
+Prototype.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: smartValve.elf secondary-outputs
+main-build: Prototype.elf secondary-outputs
 
 # Tool invocations
-smartValve.elf smartValve.map: $(OBJS) $(USER_OBJS) C:\Smart-Shower\smartValve\STM32F411RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "smartValve.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Smart-Shower\smartValve\STM32F411RCTX_FLASH.ld" -Wl,-Map="smartValve.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Prototype.elf Prototype.map: $(OBJS) $(USER_OBJS) C:\Users\lucas\OneDrive\Documentos\GitHub\Smart-Shower\Prototype\STM32F469IITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "Prototype.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\lucas\OneDrive\Documentos\GitHub\Smart-Shower\Prototype\STM32F469IITX_FLASH.ld" -Wl,-Map="Prototype.map" -Wl,--gc-sections -static -L"C:\Users\lucas\OneDrive\Documentos\GitHub\Smart-Shower\Prototype\Middlewares\ST\touchgfx\lib\core\cortex_m4f\gcc" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -109,14 +100,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-smartValve.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "smartValve.list"
+Prototype.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Prototype.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout smartValve.elf smartValve.list smartValve.map
+	-$(RM) Prototype.elf Prototype.list Prototype.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

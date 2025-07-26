@@ -60,6 +60,8 @@ volatile uint8_t uart8_tx_complete = 0;
 ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
+CRC_HandleTypeDef hcrc;
+
 LTDC_HandleTypeDef hltdc;
 
 QSPI_HandleTypeDef hqspi;
@@ -72,68 +74,12 @@ UART_HandleTypeDef huart8;
 
 SDRAM_HandleTypeDef hsdram1;
 
-/* Definitions for mainTask */
-osThreadId_t mainTaskHandle;
-const osThreadAttr_t mainTask_attributes = {
-  .name = "mainTask",
+/* Definitions for defaultTask */
+osThreadId_t defaultTaskHandle;
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-};
-/* Definitions for lcdTask */
-osThreadId_t lcdTaskHandle;
-const osThreadAttr_t lcdTask_attributes = {
-  .name = "lcdTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for adcTask */
-osThreadId_t adcTaskHandle;
-const osThreadAttr_t adcTask_attributes = {
-  .name = "adcTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for lcd_task */
-osThreadId_t lcd_taskHandle;
-const osThreadAttr_t lcd_task_attributes = {
-  .name = "lcd_task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for mainMutexHandle */
-osMutexId_t mainMutexHandleHandle;
-const osMutexAttr_t mainMutexHandle_attributes = {
-  .name = "mainMutexHandle"
-};
-/* Definitions for adcControllerMutex */
-osMutexId_t adcControllerMutexHandle;
-const osMutexAttr_t adcControllerMutex_attributes = {
-  .name = "adcControllerMutex"
-};
-/* Definitions for lcdControllerMutex */
-osMutexId_t lcdControllerMutexHandle;
-const osMutexAttr_t lcdControllerMutex_attributes = {
-  .name = "lcdControllerMutex"
-};
-/* Definitions for uartControllerMutex */
-osMutexId_t uartControllerMutexHandle;
-const osMutexAttr_t uartControllerMutex_attributes = {
-  .name = "uartControllerMutex"
-};
-/* Definitions for adcMutex */
-osMutexId_t adcMutexHandle;
-const osMutexAttr_t adcMutex_attributes = {
-  .name = "adcMutex"
-};
-/* Definitions for uartMutex */
-osMutexId_t uartMutexHandle;
-const osMutexAttr_t uartMutex_attributes = {
-  .name = "uartMutex"
-};
-/* Definitions for lcdMutex */
-osMutexId_t lcdMutexHandle;
-const osMutexAttr_t lcdMutex_attributes = {
-  .name = "lcdMutex"
 };
 /* USER CODE BEGIN PV */
 __IO uint16_t uhADCxConvertedValue = 0;
@@ -156,10 +102,8 @@ static void MX_SPI2_Init(void);
 static void MX_UART4_Init(void);
 static void MX_UART8_Init(void);
 static void MX_UART5_Init(void);
-void mainFunction(void *argument);
-void uartFunction(void *argument);
-void adcFunction(void *argument);
-void lcd_function(void *argument);
+static void MX_CRC_Init(void);
+void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 void RESTORE_ADC();
@@ -262,6 +206,7 @@ int main(void)
   MX_UART4_Init();
   MX_UART8_Init();
   MX_UART5_Init();
+  MX_CRC_Init();
   /* USER CODE BEGIN 2 */
 
   /* Infinite loop */
@@ -304,27 +249,6 @@ int main(void)
 
   /* Init scheduler */
   osKernelInitialize();
-  /* Create the mutex(es) */
-  /* creation of mainMutexHandle */
-  mainMutexHandleHandle = osMutexNew(&mainMutexHandle_attributes);
-
-  /* creation of adcControllerMutex */
-  adcControllerMutexHandle = osMutexNew(&adcControllerMutex_attributes);
-
-  /* creation of lcdControllerMutex */
-  lcdControllerMutexHandle = osMutexNew(&lcdControllerMutex_attributes);
-
-  /* creation of uartControllerMutex */
-  uartControllerMutexHandle = osMutexNew(&uartControllerMutex_attributes);
-
-  /* creation of adcMutex */
-  adcMutexHandle = osMutexNew(&adcMutex_attributes);
-
-  /* creation of uartMutex */
-  uartMutexHandle = osMutexNew(&uartMutex_attributes);
-
-  /* creation of lcdMutex */
-  lcdMutexHandle = osMutexNew(&lcdMutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -343,17 +267,8 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of mainTask */
-  mainTaskHandle = osThreadNew(mainFunction, NULL, &mainTask_attributes);
-
-  /* creation of lcdTask */
-  lcdTaskHandle = osThreadNew(uartFunction, NULL, &lcdTask_attributes);
-
-  /* creation of adcTask */
-  adcTaskHandle = osThreadNew(adcFunction, NULL, &adcTask_attributes);
-
-  /* creation of lcd_task */
-  lcd_taskHandle = osThreadNew(lcd_function, NULL, &lcd_task_attributes);
+  /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -512,6 +427,32 @@ static void MX_ADC1_Init(void)
 }
 
 /**
+  * @brief CRC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_CRC_Init(void)
+{
+
+  /* USER CODE BEGIN CRC_Init 0 */
+
+  /* USER CODE END CRC_Init 0 */
+
+  /* USER CODE BEGIN CRC_Init 1 */
+
+  /* USER CODE END CRC_Init 1 */
+  hcrc.Instance = CRC;
+  if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CRC_Init 2 */
+
+  /* USER CODE END CRC_Init 2 */
+
+}
+
+/**
   * @brief LTDC Initialization Function
   * @param None
   * @retval None
@@ -525,7 +466,6 @@ static void MX_LTDC_Init(void)
   /* USER CODE END LTDC_Init 0 */
 
   LTDC_LayerCfgTypeDef pLayerCfg = {0};
-  LTDC_LayerCfgTypeDef pLayerCfg1 = {0};
 
   /* USER CODE BEGIN LTDC_Init 1 */
 
@@ -557,7 +497,7 @@ static void MX_LTDC_Init(void)
   pLayerCfg.WindowY0 = 0;
   pLayerCfg.WindowY1 = 480;
   pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
-  pLayerCfg.Alpha = 0;
+  pLayerCfg.Alpha = 255;
   pLayerCfg.Alpha0 = 0;
   pLayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
   pLayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
@@ -568,25 +508,6 @@ static void MX_LTDC_Init(void)
   pLayerCfg.Backcolor.Green = 0;
   pLayerCfg.Backcolor.Red = 0;
   if (HAL_LTDC_ConfigLayer(&hltdc, &pLayerCfg, 0) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  pLayerCfg1.WindowX0 = 0;
-  pLayerCfg1.WindowX1 = 800;
-  pLayerCfg1.WindowY0 = 0;
-  pLayerCfg1.WindowY1 = 480;
-  pLayerCfg1.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
-  pLayerCfg1.Alpha = 0;
-  pLayerCfg1.Alpha0 = 0;
-  pLayerCfg1.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
-  pLayerCfg1.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
-  pLayerCfg1.FBStartAdress = 0;
-  pLayerCfg1.ImageWidth = 800;
-  pLayerCfg1.ImageHeight = 0;
-  pLayerCfg1.Backcolor.Blue = 255;
-  pLayerCfg1.Backcolor.Green = 255;
-  pLayerCfg1.Backcolor.Red = 255;
-  if (HAL_LTDC_ConfigLayer(&hltdc, &pLayerCfg1, 1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -630,7 +551,7 @@ static void MX_LTDC_Init(void)
   {
     Error_Handler();
   }
-  pLayerCfg1.WindowX0 = 0;
+ /* pLayerCfg1.WindowX0 = 0;
   pLayerCfg1.WindowX1 = INNERBUFFER_WIDTH;
   pLayerCfg1.WindowY0 = 0;
   pLayerCfg1.WindowY1 = INNERBUFFER_HEIGHT;
@@ -648,7 +569,7 @@ static void MX_LTDC_Init(void)
   if (HAL_LTDC_ConfigLayer(&hltdc, &pLayerCfg1, 1) != HAL_OK)
   {
     Error_Handler();
-  }
+  }*/
   /* USER CODE END LTDC_Init 2 */
 
 }
@@ -836,7 +757,7 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA2_Stream0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
@@ -1051,14 +972,14 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 }
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_mainFunction */
+/* USER CODE BEGIN Header_StartDefaultTask */
 /**
-  * @brief  Function implementing the mainTask thread.
+  * @brief  Function implementing the defaultTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_mainFunction */
-void mainFunction(void *argument)
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
@@ -1072,80 +993,6 @@ void mainFunction(void *argument)
     osDelay(500);
   }
   /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_uartFunction */
-/**
-* @brief Function implementing the lcdTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_uartFunction */
-void uartFunction(void *argument)
-{
-  /* USER CODE BEGIN uartFunction */
-  /* Infinite loop */
-  for(;;)
-  {	char msg8[100];
-	sprintf(msg8,"Uart Function  ###### UART #####\n");
-	HAL_UART_Transmit(&huart8, (uint8_t *)msg8, strlen(msg8), 1000);
-    osDelay(200);
-  }
-  /* USER CODE END uartFunction */
-}
-
-/* USER CODE BEGIN Header_adcFunction */
-/**
-* @brief Function implementing the adcTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_adcFunction */
-void adcFunction(void *argument)
-{
-  /* USER CODE BEGIN adcFunction */
-  int y_;
-  /* Infinite loop */
-  for(;;)
-  {	char msg8[100];
-	sprintf(msg8,"ADC Function  ###### ADC #####\n");
-	HAL_UART_Transmit(&huart8, (uint8_t *)msg8, strlen(msg8), 1000);
-
-	RESTORE_ADC(); // Restore ADC to its starting condition
-	HAL_ADC_Start(&hadc1); // Start ADC based on starting condition
-	if (HAL_ADC_PollForConversion(&hadc1, 10) == HAL_OK) { // Read ADC in Polling Mode
-		y_ = HAL_ADC_GetValue(&hadc1); // Get Value stored in ADC register
-		HAL_ADC_Stop(&hadc1); // Stop Conversion
-		if (y_ > 2500) { // Check Reading to identify if it was touched
-			scan_(BUFFER_LAYER_1_ADDRESS);
-			osDelay(100);
-
-			if (HAL_ADC_Init(&hadc1) != HAL_OK) Error_Handler(); // Make sure it is re-initialized
-		}
-    }
-    osDelay(100);
-  }
-  /* USER CODE END adcFunction */
-}
-
-/* USER CODE BEGIN Header_lcd_function */
-/**
-* @brief Function implementing the lcd_task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_lcd_function */
-void lcd_function(void *argument)
-{
-  /* USER CODE BEGIN lcd_function */
-  /* Infinite loop */
-  for(;;)
-  {	char msg8[100];
-	sprintf(msg8,"LCD Function  ###### LCD #####\n");
-	HAL_UART_Transmit(&huart8, (uint8_t *)msg8, strlen(msg8), 1000);
-    osDelay(400);
-  }
-  /* USER CODE END lcd_function */
 }
 
 /**
